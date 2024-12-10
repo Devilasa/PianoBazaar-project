@@ -111,9 +111,9 @@ class Score(models.Model):
                      f'price: {self.price}€\n'\
                      f'scoring: {self.scoring}\n'\
                      f'score type: {self.score_type}\n'\
-                     f'genre 1:{self.genre_1} {self.genre_2}\n'\
-                     f'key:{self.published_key}\n'\
-                     f'pages:{self.pages_number}\n'
+                     f'genre: {self.genre_1} {self.genre_2}\n'\
+                     f'key: {self.published_key}\n'\
+                     f'pages: {self.pages_number}\n'
 
 
 class Copy(models.Model):
