@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, re_path, include
+
+from .initcmds import init_db, erase_db
 from .views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,3 +25,6 @@ urlpatterns = [
 
     path('sheetmusic/', include('sheetmusic.urls'))
 ]
+
+erase_db()
+init_db()

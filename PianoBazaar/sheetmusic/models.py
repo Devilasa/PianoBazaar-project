@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
@@ -6,10 +8,10 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     birth_date = models.DateField(null=True, blank=True)
-    purchased_score = models.ManyToManyField('Score', through='Copy')
+    purchased_scores = models.ManyToManyField('Score', through='Copy')
 
     def __str__(self):
-        return self.user.first_name + self.user.last_name
+        return "name:" + self.user.first_name + " surname:"+ self.user.last_name + " username:" + self.user.__str__() + " bio:"+ self.bio + " birthday: " + str(self.birth_date)
 
 
 class Score(models.Model):
@@ -90,17 +92,29 @@ class Score(models.Model):
     )
 
     title = models.CharField(max_length=50)
-    Arranger = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(1), MaxValueValidator(300)], default=(4,99))
+    arranger = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(1), MaxValueValidator(300)], default=Decimal(4.99))
     scoring = models.CharField(max_length=50, choices=SCORING_CHOICES)
-    type = models.CharField(max_length=50, choices=PIECE_TYPE_CHOICES)
+    score_type = models.CharField(max_length=50, choices=PIECE_TYPE_CHOICES)
     genre_1 = models.CharField(max_length=50, choices=GENRE_CHOICES)
     genre_2 = models.CharField(max_length=50, choices=GENRE_CHOICES, blank=True)
     published_key = models.CharField(max_length=50, choices=KEY_CHOICES)
-    youtube_id_video = models.CharField(max_length=50) #ricordati di fare l'estrazione
-    #review
     pages_number = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
-    file = models.FileField(upload_to='scores/')
+    file = models.FileField(upload_to='scores/', blank=True, null=True) # lo metteremo obbligatorio ovviamente
+    youtube_id_video = models.CharField(max_length=50, blank=True)  # ricordati di fare l'estrazione
+    # review
+
+    def __str__(self):
+        return f'sheetmusic with pk: {self.pk}\n'\
+               f'title: {self.title}\n'\
+               f'arranger: {self.arranger.user.username}\n'\
+                     f'price: {self.price}€\n'\
+                     f'scoring: {self.scoring}\n'\
+                     f'score type: {self.score_type}\n'\
+                     f'genre 1:{self.genre_1} {self.genre_2}\n'\
+                     f'key:{self.published_key}\n'\
+                     f'pages:{self.pages_number}\n'
+
 
 class Copy(models.Model):
     score = models.ForeignKey(Score, on_delete=models.CASCADE)

@@ -9,4 +9,5 @@ def sheetmusic_home(request):
 class CreateSheetMusic(CreateView):
     title = "add a score to the collection"
     template_name = 'sheetmusic/create_entry.html'
+    fields = '__all__'
     success_url = reverse_lazy("sheetmusic:home")
