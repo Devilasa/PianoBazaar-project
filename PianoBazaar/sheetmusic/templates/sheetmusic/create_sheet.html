@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ title }} {% endblock %} 
+
+{% load crispy_forms_tags %}
+
+{% block content %} 
+    
+<div style="text-align: center;">
+    <h1>{{message}}</h1>
+</div>
+<div class="d-flex justify-content-center">
+
+  {% crispy form %}
+
+</div>
+
+
+{% endblock %}

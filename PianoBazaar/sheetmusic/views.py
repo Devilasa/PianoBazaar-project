@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 
+from sheetmusic.forms import CreateSheetForm
 from sheetmusic.models import Score
 
 
@@ -10,12 +11,17 @@ def sheetmusic_home(request):
 
 class SheetMusicList(ListView):
     model = Score
-    template_name = 'sheetmusic/score_list.html'
+    template_name = 'sheetmusic/sheet_list.html'
 
 
 class CreateSheetMusic(CreateView):
     model = Score
-    title = "add a score to the collection"
-    template_name = 'sheetmusic/create_entry.html'
-    fields = '__all__'
-    success_url = reverse_lazy("sheetmusic:home")
+    form_class = CreateSheetForm
+    template_name = 'sheetmusic/create_sheet.html'
+    success_url = reverse_lazy("sheetmusic:sheet_list")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Create sheet'
+        context['message'] = 'Load new sheet'
+        return context

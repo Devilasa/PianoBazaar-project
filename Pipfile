@@ -8,7 +8,7 @@ django = "*"
 python-decouple = "*"
 django-crispy-forms = "*"
 django-braces = "*"
-crispy-bootstrap4 = "*"
+crispy-bootstrap5 = "*"
 
 [dev-packages]
 

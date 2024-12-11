@@ -48,7 +48,7 @@ def init_db():
             'genre_1': 'blues',
             'genre_2': '',
             'published_key': 'B major',
-            'pages_number': 3,
+            'pages': 3,
             'file': '',
             'youtube_id_video': '',
         },
@@ -61,7 +61,7 @@ def init_db():
             'genre_1': 'blues',
             'genre_2': 'epic',
             'published_key': 'C minor',
-            'pages_number': 2,
+            'pages': 2,
             'file': '',
             'youtube_id_video': '',
         },
@@ -74,7 +74,7 @@ def init_db():
             'genre_1': 'experimental',
             'genre_2': 'relax',
             'published_key': 'C major',
-            'pages_number': 6,
+            'pages': 6,
             'file': '',
             'youtube_id_video': '',
         },
@@ -87,7 +87,7 @@ def init_db():
             'genre_1': 'classical',
             'genre_2': '',
             'published_key': 'E major',
-            'pages_number': 10,
+            'pages': 10,
             'file': '',
             'youtube_id_video': '',
         },
@@ -144,11 +144,11 @@ def init_db():
         genre_1 = score_data['genre_1']
         genre_2 = score_data['genre_2']
         published_key = score_data['published_key']
-        pages_number = score_data['pages_number']
+        pages = score_data['pages']
         file = score_data['file']
 
         print("\nprovo a creare lo spartito intitolato " +title)
-        score, created = Score.objects.get_or_create(title=title, arranger=Profile.objects.get(user__username=arranger) ,price=price, scoring=scoring, score_type=score_type, genre_1=genre_1, genre_2=genre_2, published_key=published_key, pages_number=pages_number, file=file)
+        score, created = Score.objects.get_or_create(title=title, arranger=Profile.objects.get(user__username=arranger) ,price=price, scoring=scoring, score_type=score_type, genre_1=genre_1, genre_2=genre_2, published_key=published_key, pages=pages, file=file)
         if created:
             score.save()
             print(score)

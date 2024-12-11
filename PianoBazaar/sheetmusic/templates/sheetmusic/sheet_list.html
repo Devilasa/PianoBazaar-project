@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} Dump del DB Score {% endblock %}
+
+{% block content %}
+
+
+{% for s in object_list %}
+<br>
+<div class="card">
+  <div class="card-header">
+    {{ s }}
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">{{ s.title }}</h5>
+    <p class="card-text">a {{ s.score_type }} by {{ s.arranger }} {{ s.pages }} pages long</p>
+
+
+    <a href="{% url 'sheetmusic:home' %}" class="btn btn-info">
+
+    Buy it!</a>
+
+  </div>
+</div>
+<br>
+{% endfor %}
+
+
+{% endblock %}
