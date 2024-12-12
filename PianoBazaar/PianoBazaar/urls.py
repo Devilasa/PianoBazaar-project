@@ -26,5 +26,5 @@ urlpatterns = [
     path('sheetmusic/', include('sheetmusic.urls'))
 ]
 
-# erase_db()
-# init_db()
+erase_db()
+init_db()
