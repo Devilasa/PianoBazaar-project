@@ -1,6 +1,8 @@
+import os
 from datetime import datetime, date
 from decimal import Decimal
 
+from django.conf.global_settings import MEDIA_URL
 from django.contrib.auth.models import User
 
 from sheetmusic.models import Score, Profile, Copy
@@ -11,6 +13,9 @@ def erase_db():
     Copy.objects.all().delete()
     User.objects.all().delete()
     Profile.objects.all().delete()
+    for cover_jpg in os.listdir('media/scores/covers/'):
+        target_file = os.path.join('media/scores/covers/', cover_jpg)
+        os.remove(target_file)
 
 def init_db():
     print("Initializing DB")
@@ -19,76 +24,73 @@ def init_db():
 
     users_data = [
          {
-            'username': 'Gianni',
-            'password': 'gianni1234',
-            'email': 'gianni@gmail.com',
-            'first_name': 'gianni',
-            'last_name': 'giovanni',
-            'bio': 'the gianni guy',
-            'birth_date': date(1990, 1, 1)
+            'username': 'Beethoven',
+            'password': 'beethoven1234',
+            'email': 'beethoven@gmail.com',
+            'first_name': 'Ludwig',
+            'last_name': 'van Beethoven',
+            'bio': 'the deaf guy',
+            'birth_date': date(1770, 12, 16)
         },
         {
-            'username': 'Pippo',
-            'password': 'pippo1234',
-            'email': 'pippo@gmail.com',
-            'first_name': 'pippo',
-            'last_name': 'filippo',
-            'bio': 'the pippo guy',
-            'birth_date': date(2001, 2, 2)
+            'username': 'Chopin',
+            'password': 'chopin1234',
+            'email': 'chopin@gmail.com',
+            'first_name': 'Fryderyk',
+            'last_name': 'Chopin',
+            'bio': 'Simplicity is the highest goal, achievable when you have overcome all difficulties',
+            'birth_date': date(1810, 3, 1)
         }
     ]
 
     scores_data = [
         {
-            'title': 'summer',
-            'arranger': 'Pippo',
-            'price': Decimal('9.99'),
+            'title': 'Moonlight Sonata No.14',
+            'arranger': 'Beethoven',
+            'price': Decimal('19.99'),
             'scoring': 'piano solo',
             'score_type': 'creation',
-            'genre_1': 'blues',
-            'genre_2': '',
-            'published_key': 'B major',
-            'file': '',
-            'youtube_video_link': '',
-        },
-        {
-            'title': 'autumn',
-            'arranger': 'Pippo',
-            'price': Decimal('5'),
-            'scoring': 'piano solo',
-            'score_type': 'creation',
-            'genre_1': 'blues',
-            'genre_2': 'epic',
-            'published_key': 'C minor',
-            'pages': 2,
-            'file': '',
-            'youtube_video_link': '',
-        },
-        {
-            'title': 'winter',
-            'arranger': 'Pippo',
-            'price': Decimal('10.00'),
-            'scoring': 'piano solo',
-            'score_type': 'mash-up',
-            'genre_1': 'experimental',
-            'genre_2': 'relax',
-            'published_key': 'C major',
-            'pages': 6,
-            'file': '',
-            'youtube_video_link': '',
-        },
-        {
-            'title': 'spring',
-            'arranger': 'Gianni',
-            'price': Decimal('20.99'),
-            'scoring': 'piano solo',
-            'score_type': 'cover',
             'genre_1': 'classical',
             'genre_2': '',
-            'published_key': 'E major',
-            'pages': 10,
-            'file': '',
-            'youtube_video_link': '',
+            'published_key': 'C# minor',
+            'file': 'media/scores/files/Beethoven_Moonlight_Sonata_No.14.pdf',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=4Tr0otuiQuU',
+        },
+        {
+            'title': 'Fur Elise',
+            'arranger': 'Beethoven',
+            'price': Decimal('11.99'),
+            'scoring': 'piano solo',
+            'score_type': 'creation',
+            'genre_1': 'classical',
+            'genre_2': '',
+            'published_key': 'A minor',
+            'file': 'media/scores/files/Beethoven_fur_Elise_WoO59.pdf',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=s71I_EWJk7I',
+        },
+        {
+            'title': 'Nocturne in C op.48 No.1',
+            'arranger': 'Chopin',
+            'price': Decimal('16.99'),
+            'scoring': 'piano solo',
+            'score_type': 'creation',
+            'genre_1': 'classical',
+            'genre_2': '',
+            'published_key': 'C major',
+            'file': 'media/scores/files/Nocturne_in_C_Op.48_No.1.pdf',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=tSAwZP8e-zQ',
+        },
+        {
+            'title': 'Nocturne op.9 No.2',
+            'arranger': 'Chopin',
+            'price': Decimal('20.99'),
+            'scoring': 'piano solo',
+            'score_type': 'creation',
+            'genre_1': 'classical',
+            'genre_2': '',
+            'published_key': 'Eb major',
+            'file': 'media/scores/files/Nocturne_Op.9_No.2.pdf',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=9E6b3swbnWg',
         },
     ]
 

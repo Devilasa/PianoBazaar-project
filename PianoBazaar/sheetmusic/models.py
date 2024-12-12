@@ -156,7 +156,7 @@ class Score(models.Model):
             with fitz.open(self.file.path) as pdf_document:
                 first_page = pdf_document[0]
                 print(type(first_page))
-                pix = first_page.get_pixmap(dpi=120)
+                pix = first_page.get_pixmap(dpi=140)
                 pix.save(out_image_path)
 
             self.cover.name = f'scores/covers/{self.pk}_cover.jpg'
