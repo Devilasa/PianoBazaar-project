@@ -10,7 +10,7 @@ from sheetmusic.models import Score
 
 class CreateSheetForm(forms.ModelForm):
     helper = FormHelper()
-    helper.form_id = 'add sheetmusic form'
+    helper.form_id = 'load sheetmusic form'
     helper.form_method = 'POST'
     helper.layout = Layout(
         Field('title', css_class='form-control', placeholder='Insert title'),
@@ -21,12 +21,11 @@ class CreateSheetForm(forms.ModelForm):
                 Field('genre_1', css_class='form-control', title='GENRE 1'),
                 Field('genre_2', css_class='form-control', title='GENRE 2'),
                 Field('published_key', css_class='form-control', title='PUBLISHED KEY'),
-                Field('pages_number', css_class='form-control', title='PAGES NUMBER'),
                 Field('file', title='FILE'),
-                Field('youtube_id_video', css_class='form-control', title='YOUTUBE ID VIDEO'),
+                Field('youtube_video_link', css_class='form-control', title='YOUTUBE VIDEO LINK'),
         )
     helper.add_input(Submit('submit', 'Add sheetmusic'))
 
     class Meta:
         model = Score
-        fields = '__all__'
+        fields = ['title', 'arranger', 'price', 'scoring', 'score_type', 'genre_1', 'genre_2', 'published_key', 'file', 'youtube_video_link']

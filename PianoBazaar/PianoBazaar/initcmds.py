@@ -48,9 +48,8 @@ def init_db():
             'genre_1': 'blues',
             'genre_2': '',
             'published_key': 'B major',
-            'pages': 3,
             'file': '',
-            'youtube_id_video': '',
+            'youtube_video_link': '',
         },
         {
             'title': 'autumn',
@@ -63,7 +62,7 @@ def init_db():
             'published_key': 'C minor',
             'pages': 2,
             'file': '',
-            'youtube_id_video': '',
+            'youtube_video_link': '',
         },
         {
             'title': 'winter',
@@ -76,7 +75,7 @@ def init_db():
             'published_key': 'C major',
             'pages': 6,
             'file': '',
-            'youtube_id_video': '',
+            'youtube_video_link': '',
         },
         {
             'title': 'spring',
@@ -89,7 +88,7 @@ def init_db():
             'published_key': 'E major',
             'pages': 10,
             'file': '',
-            'youtube_id_video': '',
+            'youtube_video_link': '',
         },
     ]
 
@@ -144,11 +143,19 @@ def init_db():
         genre_1 = score_data['genre_1']
         genre_2 = score_data['genre_2']
         published_key = score_data['published_key']
-        pages = score_data['pages']
         file = score_data['file']
+        youtube_video_link = score_data['youtube_video_link']
 
         print("\nprovo a creare lo spartito intitolato " +title)
-        score, created = Score.objects.get_or_create(title=title, arranger=Profile.objects.get(user__username=arranger) ,price=price, scoring=scoring, score_type=score_type, genre_1=genre_1, genre_2=genre_2, published_key=published_key, pages=pages, file=file)
+        score, created = Score.objects.get_or_create(title=title,
+                                                     arranger=Profile.objects.get(user__username=arranger),
+                                                     price=price,
+                                                     scoring=scoring,
+                                                     score_type=score_type,
+                                                     genre_1=genre_1, genre_2=genre_2,
+                                                     published_key=published_key,
+                                                     file=file,
+                                                     youtube_video_link=youtube_video_link)
         if created:
             score.save()
             print(score)

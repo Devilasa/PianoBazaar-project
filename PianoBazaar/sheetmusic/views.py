@@ -22,6 +22,6 @@ class CreateSheetMusic(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Create sheet'
-        context['message'] = 'Load new sheet'
+        context['title'] = 'Load sheetmusic'
+        context['message'] = 'Load new sheetmusic'
         return context

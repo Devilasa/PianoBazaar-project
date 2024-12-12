@@ -1,8 +1,18 @@
+import os.path
 from decimal import Decimal
 
+from PyPDF2 import PdfReader
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+import PyPDF2
+
+def validate_pdf(file):
+    try:
+        PdfReader(file)
+    except Exception:
+        raise ValidationError('file must be PDF format.')
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -99,15 +109,16 @@ class Score(models.Model):
     genre_1 = models.CharField(max_length=50, choices=GENRE_CHOICES)
     genre_2 = models.CharField(max_length=50, choices=GENRE_CHOICES, blank=True)
     published_key = models.CharField(max_length=50, choices=KEY_CHOICES)
-    pages = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)])
-    file = models.FileField(upload_to='scores/', blank=True, null=True) # lo metteremo obbligatorio ovviamente
-    youtube_id_video = models.CharField(max_length=50, blank=True)  # ricordati di fare l'estrazione
+    file = models.FileField(upload_to='scores/files/', validators=[validate_pdf], blank=True, null=True) # lo metteremo obbligatorio ovviamente, per rafforzare il controllo librerie mimetypes o magic
+    youtube_video_link = models.CharField(max_length=50, blank=True)  # ricordati di fare l'estrazione
+    pages = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], blank=True, null=True)
+    cover = models.FileField(upload_to='score/covers/', blank=True, null=True)
     # review
 
     def __str__(self):
         return f'{self.title} By {self.arranger}'
 
-    def detail(self):
+    def detailed_str(self):
         return f'sheetmusic with pk: {self.pk}\n' \
                f'title: {self.title}\n' \
                f'arranger: {self.arranger.user.username}\n' \
@@ -117,6 +128,39 @@ class Score(models.Model):
                f'genre: {self.genre_1} {self.genre_2}\n' \
                f'key: {self.published_key}\n' \
                f'pages: {self.pages}\n'
+
+    def set_pdf_pages_number(self):
+        try:
+            with open(self.file.path, 'rb') as pdf:
+                reader = PyPDF2.PdfReader(pdf)
+                self.pages = len(reader.pages)
+                self.save()
+                print(f'numero di pagine salvato: {self.pages}')
+        except Exception as e:
+            print(f'Errore nel leggere il file PDF: {e}')
+
+    def set_pdf_first_page_as_cover(self):
+        from pdf2image import convert_from_path
+
+        if not self.file: return None
+        try:
+            out_dir = os.path.join(os.path.dirname(self.file.path), 'covers')
+            os.makedirs(out_dir, exist_ok=True)
+
+            out_image_path = os.path.join(out_dir, f'{self.pk}_cover.jpg')
+            pages = convert_from_path(self.file.path, first_page=1, last_page=1)
+            if pages:
+                pages[0].save(out_image_path, 'JPEG')
+                self.cover.name = f'scores/covers/{self.pk}_cover.jpg'
+                self.save()
+                print(f'copertina generata e salvata: {self.cover.name}')
+
+        except Exception as e:
+            print(f'Errore nel generare la copertina: {e}')
+
+
+
+
 
 class Copy(models.Model):
     score = models.ForeignKey(Score, on_delete=models.CASCADE)

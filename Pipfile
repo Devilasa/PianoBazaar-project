@@ -9,6 +9,8 @@ python-decouple = "*"
 django-crispy-forms = "*"
 django-braces = "*"
 crispy-bootstrap5 = "*"
+pypdf2 = "*"
+pdf2image = "*"
 
 [dev-packages]
 

@@ -26,36 +26,37 @@ footer {
     padding: 1em 0;
 }
 
-/*Search Form Style*/
-form {
+#search-form {
     margin: 10px 10px;
-    display: flex; /* Usato per allineare input e bottone */
+    display: flex;
     justify-content: center;
     align-items: center;
     gap: 0;
 }
 
-.search-form input {
-    padding: 8px 10px;
+#search-form input {
+    padding: 10px;
+    width: 600px; /* Larghezza del campo di input */
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
-    width: 250px; /* Larghezza del campo di input */
+    margin-right: -53px;
+
     transition: box-shadow 0.3s ease;
 }
 
-input[type="text"] {
-    padding: 10px;
-    width: 600px; /* Dimensione input */
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-right: 10px; /* Spaziatura tra input e bottone */
-    font-size: 16px;
-}
+/*input[type="text"] {*/
+/*    padding: 10px;*/
+/*    width: 600px;*/
+/*    font-size: 16px;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 4px;*/
+/*    margin-right: 0;*/
+/*} global effect careful! */
 
-button {
-    padding: 10px 15px;
-    background-color: #007bff;
+#search-button {
+    padding: 5px 11px;
+    background-color: white;
     color: white;
     border: none;
     border-radius: 4px;
@@ -63,8 +64,8 @@ button {
     font-size: 16px;
 }
 
-button:hover {
-    transform: scale(1.08);
-    background-color: #0056b3;
+#search-button:hover {
+    transform: scale(1.24);
+    background-color: white;
 }
 
