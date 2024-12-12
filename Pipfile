@@ -5,12 +5,12 @@ name = "pypi"
 
 [packages]
 django = "*"
-python-decouple = "*"
 django-crispy-forms = "*"
 django-braces = "*"
 crispy-bootstrap5 = "*"
+python-decouple = "*"
 pypdf2 = "*"
-pdf2image = "*"
+pymudfp = "*"
 
 [dev-packages]
 
