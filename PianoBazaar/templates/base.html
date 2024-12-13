@@ -25,19 +25,19 @@
     <nav class="navbar navbar-expand-md navbar-light bg-light">
         <a class="navbar-brand" href="/">🎵 PianoBazaar</a>
         <form id="search-form" method="get" action="">
-        <label>
-            <input type="text" name="q" placeholder="Search..." value="{{ query }}">
-        </label>
+            <label>
+                <input type="text" name="q" placeholder="Search..." value="{{ query }}">
+            </label>
         <button id="search-button" type="submit">🔍</button>
         </form>
     </nav>
 
-     <section class="container-fluid h-100 pt-5">
+     <section class="container-fluid mt-3">
         {% block content %}
         <!-- Contenuto variabile inserito dalle pagine figlie -->
         {% endblock %}
     </section>
-
+    <br><br>
     <footer>
         <p>© 2024 PianoBazaar - All rights reserved.</p>
     </footer>

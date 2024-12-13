@@ -4,18 +4,23 @@ body, html {
     padding: 0;
     height: 100%;
     font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 /*Layout Wrapper*/
-.wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-}
+/*.wrapper {*/
+/*    display: flex;*/
+/*    flex-direction: column;*/
+/*    min-height: 100vh;*/
+/*!*}*! non in uso, dato che non abbiamo una classe wrapper nel base.html*/
 
 /* Content Area */
-.content {
+.container-fluid {
     flex: 1;
+    padding: 1em;
+    box-sizing: border-box;
 }
 
 /*Footer Styles*/

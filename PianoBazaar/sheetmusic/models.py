@@ -56,49 +56,49 @@ class Score(models.Model):
 
     KEY_CHOICES = (
         ('C', 'C major'),
-        ('A-', 'A minor'),
+        ('A minor', 'A minor'),
 
         ('G', 'G major (1 sharp)'),
-        ('E-', 'E minor (1 sharp)'),
+        ('E minor', 'E minor (1 sharp)'),
 
         ('D', 'D major (2 sharps'),
-        ('B-', 'B minor (2 sharps)'),
+        ('B minor', 'B minor (2 sharps)'),
 
         ('A', 'A major (3 sharps)'),
-        ('F#-', 'F# minor (3 sharps)'),
+        ('F# minor', 'F# minor (3 sharps)'),
 
         ('E', 'E major (4 sharps)'),
-        ('C#-', 'C# minor (4 sharps)'),
+        ('C# minor', 'C# minor (4 sharps)'),
 
         ('B', 'B major (5 sharps)'),
-        ('G#-', 'G# minor (5 sharps)'),
+        ('G# minor', 'G# minor (5 sharps)'),
 
         ('F#', 'F# major (6 sharps)'),
-        ('D#-', 'D# minor (6 sharps)'),
+        ('D# minor', 'D# minor (6 sharps)'),
 
         ('C#', 'C# major (7 sharps)'),
-        ('A#-', 'A# minor (7 sharps)'),
+        ('A# minor', 'A# minor (7 sharps)'),
 
         ('F', 'F major (1 flat'),
-        ('D-', 'D minor (1 flat)'),
+        ('D minor', 'D minor (1 flat)'),
 
         ('Bb', 'Bb major (2 flats)'),
-        ('G-', 'G minor (2 flats)'),
+        ('G minor', 'G minor (2 flats)'),
 
         ('Eb', 'Eb major (3 flats)'),
-        ('C-', 'C minor (3 flats)'),
+        ('C minor', 'C minor (3 flats)'),
 
         ('Ab', 'Ab major (4 flats)'),
-        ('F-', 'F minor (4 flats)'),
+        ('F minor', 'F minor (4 flats)'),
 
         ('Db', 'Db major (5 flats)'),
-        ('Bb-', 'Bb minor (5 flats)'),
+        ('Bb minor', 'Bb minor (5 flats)'),
 
         ('Gb', 'Gb major (6 flats)'),
-        ('Eb-', 'Eb minor (6 flats)'),
+        ('Ebm minor', 'Eb minor (6 flats)'),
 
         ('Cb', 'Cb major (7 flats)'),
-        ('Ab-', 'Ab minor (7 flats)')
+        ('Ab minor', 'Ab minor (7 flats)')
     )
 
     SCORING_CHOICES = (
@@ -123,6 +123,7 @@ class Score(models.Model):
         return f'{self.title} By {self.arranger}'
 
     def detailed_str(self):
+        self.published_key.value_to_string()
         return f'sheetmusic with pk: {self.pk}\n' \
                f'title: {self.title}\n' \
                f'arranger: {self.arranger.user.username}\n' \
