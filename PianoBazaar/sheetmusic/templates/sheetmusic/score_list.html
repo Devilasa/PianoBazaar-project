@@ -4,18 +4,21 @@
 
 {% block content %}
 
-
-{% for score in object_list %}
-<br>
-    <div class="card" style="width:400px">
-        <img class="card-img-top" src="{{ score.cover.url }}" alt="{{ score.cover }}" style="width:100%">
-        <div class="card-body">
-            <h4 class="card-title">{{ score.title }}</h4>
-            <p class="card-text">a {{ score.score_type }} by {{ score.arranger }} in {{ score.published_key }}.</p>
-            <a href="{% url 'sheetmusic:home' %}" class="btn btn-info">See score</a>
+<div class="container mt-3">
+    <div class="row">
+        {% for score in object_list %}
+        <div class="col-md-4">
+            <div class="card" style="width:400px">
+            <img class="card-img-top" src="{{ score.cover.url }}" alt="{{ score.cover }}" style="width:100%">
+                <div class="card-body">
+                <h4 class="card-title">{{ score.title }}</h4>
+                <p class="card-text">a {{ score.score_type }} by {{ score.arranger }} in {{ score.published_key }}.</p>
+                <a href="{% url 'sheetmusic:home' %}" class="btn btn-info">See score</a>
+                </div>
+            </div>
         </div>
+        {% endfor %}
     </div>
-<br>
-{% endfor %}
+</div><br>
     
 {% endblock %}
