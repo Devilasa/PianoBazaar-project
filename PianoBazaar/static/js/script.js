@@ -1,16 +1,18 @@
 document.addEventListener("DOMContentLoaded", function() {
         const footer = document.querySelector("footer"); // Seleziona il footer
-        let lastScrollY = window.scrollY; // Posizione iniziale dello scroll
 
-        window.addEventListener("scroll", function() {
-            const currentScrollY = window.scrollY;
+        window.addEventListener("scroll", function () {
+            const windowHeight = window.innerHeight; // Altezza visibile del viewport
+            const documentHeight = document.documentElement.scrollHeight; // Altezza totale del documento
+            const scrollTop = window.scrollY; // Posizione attuale dello scroll dall'alto
 
-            if (currentScrollY > lastScrollY) {
-                footer.classList.add("visible");
+            // Calcolo: utente è alla fine della pagina
+            const hasReachedBottom = (scrollTop + windowHeight) >= documentHeight;
+
+            if (hasReachedBottom) {
+                footer.classList.add("visible"); // Mostra il footer
             } else {
-                footer.classList.remove("visible");
+                footer.classList.remove("visible"); // Nascondi il footer
             }
-
-            lastScrollY = currentScrollY;
-        });
+    });
 });
