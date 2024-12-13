@@ -11,7 +11,7 @@ def sheetmusic_home(request):
 
 class SheetMusicList(ListView):
     model = Score
-    template_name = 'sheetmusic/sheet_list.html'
+    template_name = 'sheetmusic/score_list.html'
 
 
 class CreateSheetMusic(CreateView):
