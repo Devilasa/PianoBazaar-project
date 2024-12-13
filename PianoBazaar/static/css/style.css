@@ -72,3 +72,22 @@ footer.visible {
     background-color: white;
 }
 
+.navbar-nav .nav-item .nav-link {
+        color: royalblue; /* Colore del link */
+        font-size: 18px; /* Dimensione del testo */
+        /*font-weight: bold; !* Bold per il testo *!*/
+        /*text-transform: uppercase; !* Maiuscolo *!*/
+        margin-left: 50px;
+}
+
+.navbar-nav .nav-item .nav-link:hover {
+        color: white; /* Cambia colore al passaggio del mouse */
+        /*text-decoration: underline; !* Sottolinea il link al passaggio *!*/
+        /*text-decoration: ButtonFace;*/
+}
+
+.navbar-nav {
+        margin-left: 20px; /* Sposta i link verso destra */
+        /* Per centrare i link verticalmente */
+        align-items: center;
+}

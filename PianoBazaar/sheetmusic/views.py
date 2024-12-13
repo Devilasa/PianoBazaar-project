@@ -9,7 +9,7 @@ from sheetmusic.models import Score
 def sheetmusic_home(request):
     return render(request, template_name='sheetmusic/home.html')
 
-class SheetMusicList(ListView):
+class ScoreList(ListView):
     model = Score
     template_name = 'sheetmusic/score_list.html'
 
@@ -18,7 +18,7 @@ class CreateSheetMusic(CreateView):
     model = Score
     form_class = CreateSheetForm
     template_name = 'sheetmusic/create_sheet.html'
-    success_url = reverse_lazy("sheetmusic:sheet_list")
+    success_url = reverse_lazy("sheetmusic:home")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
