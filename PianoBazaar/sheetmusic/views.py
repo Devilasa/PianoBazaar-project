@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView
+from django.views.generic import CreateView, ListView, DetailView
 
 from sheetmusic.forms import CreateSheetForm
 from sheetmusic.models import Score
@@ -25,3 +25,7 @@ class CreateSheetMusic(CreateView):
         context['title'] = 'Load sheetmusic'
         context['message'] = 'Load new sheetmusic'
         return context
+
+class ScoreDetail(DetailView):
+    model = Score
+    template_name = 'sheetmusic/score_detail.html'

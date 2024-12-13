@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container mt-3">
+        <div class="row">
+        <!-- Card Sinistra -->
+        <div class="col-md-4">
+            <div class="card m-2 custom-card-shadow" style="width:750px; position: relative; left: 20%;">
+                <img class="card-img-top" src="{{ object.cover.url }}" alt="{{ score.cover }}" style="width:100%">
+            </div>
+        </div>
+
+        <!-- Descrizione Destra -->
+        <div class="col-md-8">
+            <h2>Descrizione</h2>
+            <p>{{ spartito.descrizione }}</p>
+
+            <h4>Dettagli</h4>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Compositore:</strong> {{ spartito.compositore }}</li>
+                <li class="list-group-item"><strong>Data di Pubblicazione:</strong> {{ spartito.data_pubblicazione|date:"d M Y" }}</li>
+                <li class="list-group-item"><strong>Formato:</strong> PDF</li>
+            </ul>
+
+            <!-- Pulsante di Azione -->
+            <a href="#" class="btn btn-primary mt-4">Acquista</a>
+        </div>
+    </div>
+    </div>
+{% endblock %}  
