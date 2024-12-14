@@ -22,6 +22,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     birth_date = models.DateField(null=True, blank=True)
+    profile_image = models.FileField(upload_to='media/profiles/profile_imgs', blank=True, null=True)
     purchased_scores = models.ManyToManyField('Score', through='Copy')
 
     def __str__(self):
