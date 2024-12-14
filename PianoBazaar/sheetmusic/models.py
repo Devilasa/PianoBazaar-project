@@ -1,15 +1,13 @@
 import os.path
-from datetime import datetime
-
 import PyPDF2
 import fitz
 
 from PyPDF2 import PdfReader
+from urllib.parse import urlparse, parse_qs
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
-
 from PianoBazaar.settings import BASE_DIR
 
 
@@ -116,8 +114,8 @@ class Score(models.Model):
     genre_1 = models.CharField(max_length=50, choices=GENRE_CHOICES)
     genre_2 = models.CharField(max_length=50, choices=GENRE_CHOICES, blank=True)
     published_key = models.CharField(max_length=50, choices=KEY_CHOICES)
-    file = models.FileField(upload_to='media/scores/files/', validators=[validate_pdf], null=True) # lo metteremo obbligatorio ovviamente, per rafforzare il controllo librerie mimetypes o magic
-    youtube_video_link = models.CharField(max_length=50, blank=True)  # ricordati di fare l'estrazione
+    file = models.FileField(upload_to='media/scores/files/', validators=[validate_pdf])
+    youtube_video_link = models.URLField(max_length=200, blank=True, null=True)
     publication_date = models.DateField(auto_now_add=True)
     pages = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], blank=True, null=True)
     cover = models.FileField(upload_to='media/scores/covers', blank=True, null=True)
@@ -169,7 +167,17 @@ class Score(models.Model):
         except Exception as e:
             print(f'Errore nel generare la copertina: {e}')
 
-
+    def get_youtube_video_id_from_link(self):
+        if not self.youtube_video_link: return None
+        query = urlparse(self.youtube_video_link)
+        if query.hostname == 'youtu.be':
+            return query.path[1:]
+        if query.hostname in ('www.youtube.com', 'youtube.com'):
+            if query.path == '/watch':
+                return parse_qs(query.query).get('v', [None])[0]
+            if query.path.startswith('/embed/'):
+                return query.path.split('/')[2]
+        return None
 
 
 

@@ -30,6 +30,18 @@
 
                 <!-- Pulsante di Azione -->
                 <a href="#" class="btn btn-primary mt-4">Buy</a>
+                <br><br>
+                <!-- Video -->
+                {% if score.youtube_video_link %}
+                    <div class="ratio ratio-16x9">
+                        <iframe class="embed-responsive-item" 
+                                src="https://www.youtube.com/embed/{{ score.get_youtube_video_id_from_link }}" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                {% else %}
+                    <p>The composer didn't link any video. 😔</p>
+                {% endif %}
             </div>
         </div>
     </div>
