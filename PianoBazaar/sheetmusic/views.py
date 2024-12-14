@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView
 
 from sheetmusic.forms import CreateSheetForm
-from sheetmusic.models import Score
+from sheetmusic.models import Score, Profile
 
 
 def sheetmusic_home(request):
@@ -29,3 +29,7 @@ class CreateSheetMusic(CreateView):
 class ScoreDetail(DetailView):
     model = Score
     template_name = 'sheetmusic/score_detail.html'
+
+class ArrangerDetail(DetailView):
+    model = Profile
+    template_name = 'sheetmusic/arranger_detail.html'

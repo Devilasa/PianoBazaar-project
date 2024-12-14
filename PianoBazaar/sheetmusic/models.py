@@ -1,4 +1,6 @@
 import os.path
+from datetime import datetime
+
 import PyPDF2
 import fitz
 
@@ -25,14 +27,15 @@ class Profile(models.Model):
     purchased_scores = models.ManyToManyField('Score', through='Copy')
 
     def __str__(self):
-        return f'{self.user.last_name} {self.user.first_name}'
+        return f'{self.user.first_name} {self.user.last_name}'
 
 
 class Score(models.Model):
     PIECE_TYPE_CHOICES = (
+        ('public domain', 'Public Domain'),
         ('cover', 'Cover'),
         ('mash-up', 'Mash-up'),
-        ('composition', 'Composition')
+        ('composition', 'Original Composition')
     )
 
     GENRE_CHOICES = (
@@ -102,7 +105,7 @@ class Score(models.Model):
     )
 
     SCORING_CHOICES = (
-        ('piano', 'piano solo'),
+        ('piano solo', 'Piano solo'),
     )
 
     title = models.CharField(max_length=50)
@@ -115,6 +118,7 @@ class Score(models.Model):
     published_key = models.CharField(max_length=50, choices=KEY_CHOICES)
     file = models.FileField(upload_to='media/scores/files/', validators=[validate_pdf], null=True) # lo metteremo obbligatorio ovviamente, per rafforzare il controllo librerie mimetypes o magic
     youtube_video_link = models.CharField(max_length=50, blank=True)  # ricordati di fare l'estrazione
+    publication_date = models.DateField(auto_now_add=True)
     pages = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], blank=True, null=True)
     cover = models.FileField(upload_to='media/scores/covers', blank=True, null=True)
     # review
@@ -123,7 +127,6 @@ class Score(models.Model):
         return f'{self.title} By {self.arranger}'
 
     def detailed_str(self):
-        self.published_key.value_to_string()
         return f'sheetmusic with pk: {self.pk}\n' \
                f'title: {self.title}\n' \
                f'arranger: {self.arranger.user.username}\n' \

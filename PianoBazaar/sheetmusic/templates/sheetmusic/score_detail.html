@@ -1,30 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container mt-3">
+    <div class="container-fluid mt-3">
         <div class="row">
         <!-- Card Sinistra -->
-        <div class="col-md-4">
-            <div class="card m-2 custom-card-shadow" style="width:750px; position: relative; left: 20%;">
-                <img class="card-img-top" src="{{ object.cover.url }}" alt="{{ score.cover }}" style="width:100%">
+            <div class="col-md-4">
+                <div class="card m-2 custom-card-shadow" style="width:750px; position: relative; left: 20%;">
+                    <img class="card-img-top" src="{{ object.cover.url }}" alt="{{ score.cover }}" style="width:100%">
+                </div>
+            </div>
+
+            <!-- Descrizione Destra -->
+            <div class="col-md-5 offset-md-2">
+                <p class="h1">{{ object.title }}</p>
+                <p class="h4 d-inline">by </p>
+                <a id="arranger-profile-link" class="h4 d-inline" style="text-decoration: none" href="{% url 'sheetmusic:arranger' object.arranger.pk %}"> {{ object.arranger }}</a>
+                <br><br>
+                <p class="h3">Details</p>
+                <ul class="list-group">
+                    <li class="list-group-item"><strong>Price:</strong> {{ object.price }}€</li>
+                    <li class="list-group-item"><strong>Scoring:</strong> {{ object.get_scoring_display }}</li>
+                    <li class="list-group-item"><strong>Score Type:</strong> {{ object.get_score_type_display }}</li>
+                    <li class="list-group-item"><strong>Genre:</strong> {{ object.get_genre_1_display}}{% if object.genre_2 %}, {{ object.get_genre_2_display }}{% endif %}</li>
+                    <li class="list-group-item"><strong>Published Key:</strong> {{ object.published_key }}</li>
+                    <li class="list-group-item"><strong>Pages:</strong> {{ object.pages }}</li>
+                    <li class="list-group-item"><strong>Publication Date:</strong> {{ object.publication_date|date:"d M Y" }}</li>
+                    <li class="list-group-item"><strong>Format:</strong> PDF</li>
+                </ul>
+
+                <!-- Pulsante di Azione -->
+                <a href="#" class="btn btn-primary mt-4">Buy</a>
             </div>
         </div>
-
-        <!-- Descrizione Destra -->
-        <div class="col-md-8">
-            <h2>Descrizione</h2>
-            <p>{{ spartito.descrizione }}</p>
-
-            <h4>Dettagli</h4>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item"><strong>Compositore:</strong> {{ spartito.compositore }}</li>
-                <li class="list-group-item"><strong>Data di Pubblicazione:</strong> {{ spartito.data_pubblicazione|date:"d M Y" }}</li>
-                <li class="list-group-item"><strong>Formato:</strong> PDF</li>
-            </ul>
-
-            <!-- Pulsante di Azione -->
-            <a href="#" class="btn btn-primary mt-4">Acquista</a>
-        </div>
-    </div>
     </div>
 {% endblock %}  
