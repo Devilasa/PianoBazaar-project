@@ -29,8 +29,10 @@ def init_db():
             'email': 'beethoven@gmail.com',
             'first_name': 'Ludwig',
             'last_name': 'van Beethoven',
-            'bio': 'the deaf guy',
-            'birth_date': date(1770, 12, 16)
+            'bio': 'I\'m german composer and pianist, a pivotal figure in classical music. Despite losing my hearing, i created iconic works like the Ninth Symphony and Moonlight Sonata, bridging Classical and Romantic styles.',
+            'mantra': 'Where words fail...music speaks',
+            'birth_date': date(1770, 12, 16),
+            'profile_image': 'media/profiles/profile_imgs/Beethoven.jpg',
         },
         {
             'username': 'Chopin',
@@ -38,8 +40,10 @@ def init_db():
             'email': 'chopin@gmail.com',
             'first_name': 'Fryderyk',
             'last_name': 'Chopin',
-            'bio': 'Simplicity is the highest goal, achievable when you have overcome all difficulties',
-            'birth_date': date(1810, 3, 1)
+            'bio': 'I\'m a polish composer and virtuoso pianist, celebrated for my poetic and technically demanding piano works, including Nocturnes, Preludes, and Mazurkas, defining Romantic piano music.',
+            'mantra': 'Simplicity is the highest goal, achievable when you have overcome all difficulties',
+            'birth_date': date(1810, 3, 1),
+            'profile_image': 'media/profiles/profile_imgs/Chopin.jpg',
         }
     ]
 
@@ -101,7 +105,9 @@ def init_db():
         first_name = user_data['first_name']
         last_name = user_data['last_name']
         bio = user_data['bio']
+        mantra = user_data['mantra']
         birth_date = user_data['birth_date']
+        profile_image = user_data['profile_image']
 
 
         print('provo a creare ' + username)
@@ -125,7 +131,7 @@ def init_db():
 
         print("provo a creare il profilo")
         print(birth_date)
-        profile, created = Profile.objects.get_or_create(user=user, bio=bio, birth_date=birth_date)
+        profile, created = Profile.objects.get_or_create(user=user, bio=bio, mantra=mantra, birth_date=birth_date, profile_image=profile_image)
         if created:
             print('profile created!')
             profile.save()
