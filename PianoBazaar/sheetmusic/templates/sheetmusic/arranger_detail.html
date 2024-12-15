@@ -1,40 +1,58 @@
 {% extends 'base.html' %}
 
+{% block extra-css %}
+    <!-- Font Awesome Kit CSS-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-    
+
     <div class="p-5 bg-primary text-white text-center">
       <h1>{{ object.user.first_name }} {{ object.user.last_name }}'s profile</h1>
     </div>
+
     <div class="container-fluid mt-5">
-      <div class="row">
-        <div class="col-sm-4">
-          <h2>@{{ profile.user.username }}</h2>
-            <img src="/media/media/profiles/profile_imgs/Cat fofo aesthetic.jpg" class="rounded-circle" alt="profile image" width="150" height="150" style="margin-left: 20px;">
-          <h3 class="mt-4">My Socials</h3>
-          <ul class="nav nav-pills flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" href="#">youtube</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">instagram</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">twitter</a>
-            </li>
-          </ul>
-          <hr class="d-sm-none">
+        <div class="row">
+            <div class="col-md-4">
+              <h2>@{{ profile.user.username }}</h2>
+                <img src="{{object.profile_image.url}}" class="rounded-circle" alt="profile image" width="150" height="150" style="margin-left: 20px;">
+            </div>
+
+            <div class="col-md-8">
+              <h2>About me</h2>
+              <h5>{{ object.bio }}</h5>
+                <hr class="d-sm-none">
+            </div>
         </div>
-        <div class="col-sm-8">
-          <h2>About me</h2>
-          <h5>{{ object.bio }}</h5>
-         
-    
-          <h2 class="mt-5">TITLE HEADING</h2>
-          <h5>Title description, Sep 2, 2020</h5>
-          <div class="fakeimg">Fake Image</div>
-          <p>Some text..</p>
-          <p>Sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco.</p>
+        <hr class="d-sm-none">
+
+        <div class="row">
+            <div class="col-md-4">
+                <h3 class="mt-5 bg-primary rounded-1 text-white">My Socials</h3>
+              <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                  <a class="nav-link" href="https://www.youtube.com/@DLMusicPiano/" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-youtube" style="color: #FF0000"></i> youtube
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="https://www.instagram.com/yomii_piano/" target="_blank" rel="noopener noreferrer">
+                      <i class="fab fa-instagram" style="color: #C13584"></i> instagram
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                      <i class="fab fa-x x-icon" style="color: #000000;"></i> twitter
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-md-8">
+              <h2 class="mt-5">My Mantra</h2>
+                <h5>"{{ object.mantra }}"</h5>
+            </div>
         </div>
-      </div>
     </div>
+
 {% endblock %}

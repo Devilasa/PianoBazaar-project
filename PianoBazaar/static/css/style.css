@@ -101,3 +101,11 @@ footer.visible {
         /* Per centrare i link verticalmente */
         align-items: center;
 }
+
+.nav-item .nav-link .fab:hover {
+    animation: fa-beat 0.5s infinite;
+}
+
+.nav-item .nav-link:hover .fab {
+    animation: fa-beat 0.5s infinite;
+}
