@@ -25,7 +25,7 @@ def init_db():
     users_data = [
          {
             'username': 'Beethoven',
-            'password': 'beethoven1234',
+            'password': 'Beethoven1234',
             'email': 'beethoven@gmail.com',
             'first_name': 'Ludwig',
             'last_name': 'van Beethoven',
@@ -33,10 +33,13 @@ def init_db():
             'mantra': 'Where words fail...music speaks',
             'birth_date': date(1770, 12, 16),
             'profile_image': 'media/profiles/profile_imgs/Beethoven.jpg',
+            'youtube_account_id': '',
+            'instagram_account_id': '',
+            'x_account_id': '',
         },
         {
             'username': 'Chopin',
-            'password': 'chopin1234',
+            'password': 'Chopin1234',
             'email': 'chopin@gmail.com',
             'first_name': 'Fryderyk',
             'last_name': 'Chopin',
@@ -44,6 +47,23 @@ def init_db():
             'mantra': 'Simplicity is the highest goal, achievable when you have overcome all difficulties',
             'birth_date': date(1810, 3, 1),
             'profile_image': 'media/profiles/profile_imgs/Chopin.jpg',
+            'youtube_account_id': '',
+            'instagram_account_id': '',
+            'x_account_id': '',
+        },
+        {
+            'username': 'Lasa',
+            'password': 'Lasa1234',
+            'email': 'lasa@gmail.com',
+            'first_name': 'Davide',
+            'last_name': 'Lasagni',
+            'bio': 'I\'m the creator of this beautiful website and in my free time i\'m also a piano lover!',
+            'mantra': 'Convince yourself that you play well, and you will play well.',
+            'birth_date': date(2001, 2, 24),
+            'profile_image': 'media/profiles/profile_imgs/dripping_cat.jpg',
+            'youtube_account_id': 'DLMusicPiano',
+            'instagram_account_id': 'davidelasagni',
+            'x_account_id': '',
         }
     ]
 
@@ -58,7 +78,7 @@ def init_db():
             'genre_2': '',
             'published_key': 'C# minor',
             'file': 'media/scores/files/Beethoven_Moonlight_Sonata_No.14.pdf',
-            'youtube_video_link': 'https://www.youtube.com/watch?v=4Tr0otuiQuU',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=ITidiBe-0T0',
         },
         {
             'title': 'Fur Elise',
@@ -82,7 +102,7 @@ def init_db():
             'genre_2': '',
             'published_key': 'C major',
             'file': 'media/scores/files/Nocturne_in_C_Op.48_No.1.pdf',
-            'youtube_video_link': 'https://www.youtube.com/watch?v=tSAwZP8e-zQ',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=cpeqVK-FtFA',
         },
         {
             'title': 'Nocturne op.9 No.2',
@@ -96,6 +116,18 @@ def init_db():
             'file': 'media/scores/files/Nocturne_Op.9_No.2.pdf',
             'youtube_video_link': 'https://www.youtube.com/watch?v=9E6b3swbnWg',
         },
+        {
+            'title': 'Stereo Love X We Found Love',
+            'arranger': 'Lasa',
+            'price': Decimal('5.99'),
+            'scoring': 'piano solo',
+            'score_type': 'mash-up',
+            'genre_1': 'pop',
+            'genre_2': 'experimental',
+            'published_key': 'C# minor',
+            'file': 'media/scores/files/DavideLasagni_WeFoundLoveXStereoLove.pdf',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=dD1Y6LiSBVo',
+        }
     ]
 
     for user_data in users_data:
@@ -108,6 +140,9 @@ def init_db():
         mantra = user_data['mantra']
         birth_date = user_data['birth_date']
         profile_image = user_data['profile_image']
+        youtube_account_id = user_data['youtube_account_id']
+        instagram_account_id = user_data['instagram_account_id']
+        x_account_id = user_data['x_account_id']
 
 
         print('provo a creare ' + username)
@@ -131,7 +166,9 @@ def init_db():
 
         print("provo a creare il profilo")
         print(birth_date)
-        profile, created = Profile.objects.get_or_create(user=user, bio=bio, mantra=mantra, birth_date=birth_date, profile_image=profile_image)
+        profile, created = Profile.objects.get_or_create(user=user, bio=bio, mantra=mantra, birth_date=birth_date, profile_image=profile_image,
+                                                         youtube_account_id=youtube_account_id, instagram_account_id=instagram_account_id, x_account_id=x_account_id,
+                                                         )
         if created:
             print('profile created!')
             profile.save()
