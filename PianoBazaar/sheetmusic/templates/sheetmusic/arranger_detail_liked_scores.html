@@ -1,0 +1,19 @@
+{% extends 'sheetmusic/arranger_detail.html' %}
+
+
+    
+{% block selection %}
+        
+    <div class="row mt-3">
+        <div class="col-md-12 mt-5 bg-primary text-white rounded-1">
+            <ul class="pagination pagination-lg">
+                        
+                <li class="page-item"><a class="page-link" href="{% url 'sheetmusic:arranger' profile.pk %}" >My Sheet music</a></li>
+                <li class="page-item active"><a class="page-link" href="">Liked scores</a></li>
+                <li class="page-item"><a class="page-link" href="{% url 'sheetmusic:arranger_purchased_scores' profile.pk %}">Purchased scores</a></li>
+                
+            </ul>
+        </div>
+    </div>
+        
+{% endblock %}

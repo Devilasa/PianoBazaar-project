@@ -32,3 +32,32 @@ class ScoreDetail(DetailView):
 class ArrangerDetail(DetailView):
     model = Profile
     template_name = 'sheetmusic/arranger_detail.html'
+    context_object_name = 'profile'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['my_scores_list'] = Score.objects.filter(arranger=self.object)
+
+        return context
+
+class ArrangerDetailLikedScores(DetailView):
+    model = Profile
+    template_name = 'sheetmusic/arranger_detail_liked_scores.html'
+    context_object_name = 'profile'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['my_scores_list'] = Score.objects.filter(arranger=self.object)
+
+        return context
+
+class ArrangerDetailPurchasedScores(DetailView):
+    model = Profile
+    template_name = 'sheetmusic/arranger_detail_purchased_scores.html'
+    context_object_name = 'profile'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # context['my_scores_list'] = Score.objects.filter(arranger=self.object)
+
+        return context

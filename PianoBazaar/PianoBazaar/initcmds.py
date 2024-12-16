@@ -117,7 +117,7 @@ def init_db():
             'youtube_video_link': 'https://www.youtube.com/watch?v=9E6b3swbnWg',
         },
         {
-            'title': 'Stereo Love X We Found Love',
+            'title': 'We Found Love X Stereo Love',
             'arranger': 'Lasa',
             'price': Decimal('5.99'),
             'scoring': 'piano solo',

@@ -28,13 +28,13 @@ function adjustCardSizes() {
   const containerWidth = container.clientWidth; // Larghezza orizzontale disponibile (in pixel)
   const cardMargin = 16; // Margine laterale (0.5rem = 16px, 8px su ogni lato)
 
-  //minCardWidth = 320; (In pixel)
-  //maxCardWidth = 430; (optimal range)
+  //minCardWidth = 325; (In pixel)
+  //maxCardWidth = 435; (optimal range)
   //problema di PLI: f.obj.minimizzazione del resto in pixel; poi prova a risolverlo graficamente
 
-  let actCardWidth = 320;
+  let actCardWidth = 325;
 
-  let best_pixel_rest = 350;
+  let best_pixel_rest = 325;
   let best_card_width = 350;
 
   for (let i = 0; i < 23; i++) {
@@ -48,7 +48,7 @@ function adjustCardSizes() {
       actCardWidth += 5;
   }
   console.log(containerWidth);
-  console.log(best_pixel_rest);
+  console.log("scarto", best_pixel_rest);
   console.log(best_card_width);
 
   const cards = document.querySelectorAll('.card');
