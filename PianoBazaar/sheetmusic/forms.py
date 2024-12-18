@@ -1,9 +1,6 @@
-from decimal import Decimal
-
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit, Layout, Div, HTML, Field, Fieldset
+from crispy_forms.layout import Submit, Layout, Field
 from django import forms
-from django.template.defaultfilters import title, default, floatformat
 
 from sheetmusic.models import Score
 

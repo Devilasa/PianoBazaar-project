@@ -17,6 +17,7 @@ Including another URLconf
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, re_path, include
+from django.contrib.auth import views as auth_views
 
 from . import settings
 from .initcmds import init_db, erase_db
@@ -24,8 +25,11 @@ from .views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     re_path(r'^$|^/$|^home/$', home, name='home'),
+    path('sheetmusic/', include('sheetmusic.urls')),
 
-    path('sheetmusic/', include('sheetmusic.urls'))
+    path("register/", UserCreateView.as_view(), name="register"),
+    path("login/", auth_views.LoginView.as_view(), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
 ]
 
 if settings.DEBUG:

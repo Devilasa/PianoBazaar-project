@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block header %}
+    <h1>Registration page</h1>
+    <br>
+    <h5>Hello, in order to register please compile the following forms.</h5>
+{% endblock %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-center" style="height: 100vh;">
+        <form method="post"> {% csrf_token %}
+
+            <div class="form-group mb-4">
+                {{ form.username|as_crispy_field }}
+            </div>
+
+            <div class="form-group mb-4">
+                {{ form.password1|as_crispy_field }}
+            </div>
+
+            <div class="form-group mb-4">
+                {{ form.password2|as_crispy_field }}
+            </div>
+
+            <div class="form-group mb-3">
+                {{ form.email|as_crispy_field }}
+            </div>
+
+            <input type="submit" class="btn btn-success mt-2 bg-primary" value="Register now!">
+
+        </form>
+    </div>
+    <br><br><br><br>
+{% endblock %}
+

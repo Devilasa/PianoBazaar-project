@@ -61,3 +61,4 @@ class ArrangerDetailPurchasedScores(DetailView):
         # context['my_scores_list'] = Score.objects.filter(arranger=self.object)
 
         return context
+
