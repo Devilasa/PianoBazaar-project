@@ -67,10 +67,44 @@ def init_db():
         }
     ]
 
+    for user_data in users_data:
+        user_values = {
+            'username': user_data['username'],
+            'email': user_data['email'],
+            'first_name':  user_data['first_name'],
+            'last_name': user_data['last_name'],
+        }
+
+        profile_values = {
+            'user' : '',
+            'profile_image': user_data['profile_image'],
+            'bio': user_data['bio'],
+            'mantra': user_data['mantra'],
+            'birth_date': user_data['birth_date'],
+            'youtube_account_id': user_data['youtube_account_id'],
+            'instagram_account_id': user_data['instagram_account_id'],
+            'x_account_id': user_data['x_account_id'],
+        }
+
+        user, created = User.objects.get_or_create(**user_values)
+        if created:
+            print(f'user {user.username} created!')
+            user.set_password(user_data['password'])
+            user.save()
+        else:
+            print(f'l\'utente {user.username} already exists!')
+        profile_values['user'] = user
+
+        profile, created = Profile.objects.get_or_create(**profile_values)
+        if created:
+            print(f'profile {user.username} created!')
+        else:
+            print(f'profile {user.username} already exists!')
+
     scores_data = [
         {
             'title': 'Moonlight Sonata No.14',
-            'arranger': 'Beethoven',
+            'arranger': Profile.objects.get(user__username='Beethoven'),
             'price': Decimal('19.99'),
             'scoring': 'piano solo',
             'score_type': 'public domain',
@@ -82,7 +116,7 @@ def init_db():
         },
         {
             'title': 'Fur Elise',
-            'arranger': 'Beethoven',
+            'arranger': Profile.objects.get(user__username='Beethoven'),
             'price': Decimal('11.99'),
             'scoring': 'Piano solo',
             'score_type': 'public domain',
@@ -94,7 +128,7 @@ def init_db():
         },
         {
             'title': 'Nocturne in C op.48 No.1',
-            'arranger': 'Chopin',
+            'arranger': Profile.objects.get(user__username='Chopin'),
             'price': Decimal('16.99'),
             'scoring': 'piano solo',
             'score_type': 'public domain',
@@ -106,7 +140,7 @@ def init_db():
         },
         {
             'title': 'Nocturne op.9 No.2',
-            'arranger': 'Chopin',
+            'arranger': Profile.objects.get(user__username='Chopin'),
             'price': Decimal('20.99'),
             'scoring': 'piano solo',
             'score_type': 'public domain',
@@ -118,7 +152,7 @@ def init_db():
         },
         {
             'title': 'We Found Love X Stereo Love',
-            'arranger': 'Lasa',
+            'arranger': Profile.objects.get(user__username='Lasa'),
             'price': Decimal('5.99'),
             'scoring': 'piano solo',
             'score_type': 'mash-up',
@@ -130,80 +164,11 @@ def init_db():
         }
     ]
 
-    for user_data in users_data:
-        username = user_data['username']
-        password = user_data['password']
-        email = user_data['email']
-        first_name = user_data['first_name']
-        last_name = user_data['last_name']
-        bio = user_data['bio']
-        mantra = user_data['mantra']
-        birth_date = user_data['birth_date']
-        profile_image = user_data['profile_image']
-        youtube_account_id = user_data['youtube_account_id']
-        instagram_account_id = user_data['instagram_account_id']
-        x_account_id = user_data['x_account_id']
-
-
-        print('provo a creare ' + username)
-        try:
-            user = User.objects.get(username=username)
-            print('user ' + username + ' already exists!')
-            continue
-        except User.DoesNotExist:
-            print('user ' + username + ' does not exist!')
-
-
-        user, created = User.objects.get_or_create(username=username, email=email, first_name=first_name, last_name=last_name,)
-        if created:
-            print('user ' + username + ' created!')
-            user.set_password(password)
-            print('password set')
-            user.save()
-            print('user saved')
-        else:
-            print('FALLITO A CREARE USER ORCOKAN!')
-
-        print("provo a creare il profilo")
-        print(birth_date)
-        profile, created = Profile.objects.get_or_create(user=user, bio=bio, mantra=mantra, birth_date=birth_date, profile_image=profile_image,
-                                                         youtube_account_id=youtube_account_id, instagram_account_id=instagram_account_id, x_account_id=x_account_id,
-                                                         )
-        if created:
-            print('profile created!')
-            profile.save()
-            print("sto per stampare il profilo creato")
-            print(profile)
-        else:
-            print('FALLITO A CREARE PROFILO ORCOKAN!')
-
-
     for score_data in scores_data:
-        #Score.objects.get_or_create(**score_data)
-        title = score_data['title']
-        arranger = score_data['arranger']
-        price = score_data['price']
-        scoring = score_data['scoring']
-        score_type = score_data['score_type']
-        genre_1 = score_data['genre_1']
-        genre_2 = score_data['genre_2']
-        published_key = score_data['published_key']
-        file = score_data['file']
-        youtube_video_link = score_data['youtube_video_link']
-
-        print("\nprovo a creare lo spartito intitolato " +title)
-        score, created = Score.objects.get_or_create(title=title,
-                                                     arranger=Profile.objects.get(user__username=arranger),
-                                                     price=price,
-                                                     scoring=scoring,
-                                                     score_type=score_type,
-                                                     genre_1=genre_1, genre_2=genre_2,
-                                                     published_key=published_key,
-                                                     file=file,
-                                                     youtube_video_link=youtube_video_link)
+        score, created = Score.objects.get_or_create(**score_data)
         if created:
             score.save()
-            print(score)
+            # print(score)
         else:
             print('FALLITO A CREARE SPARTITO ORCOKAN!')
 
