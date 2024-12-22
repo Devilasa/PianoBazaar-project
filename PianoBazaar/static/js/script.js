@@ -48,7 +48,7 @@ function adjustCardSizes() {
       actCardWidth += 5;
   }
   console.log(containerWidth);
-  console.log("scarto", best_pixel_rest);
+  console.log("rest", best_pixel_rest);
   console.log(best_card_width);
 
   const cards = document.querySelectorAll('.card');

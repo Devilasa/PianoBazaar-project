@@ -29,7 +29,6 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -136,5 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
-LOGIN_REDIRECT_URL = "/?login=ok"
-LOGIN_URL = "/login/?auth=notok"
+# LOGIN_REDIRECT_URL = "/sheetmusic/?login=ok"
+LOGIN_REDIRECT_URL = '/sheetmusic/'
+LOGIN_URL = '/login/?auth=notok'
+

@@ -13,7 +13,7 @@ def home(request):
 
 class UserCreateView(CreateView):
     form_class = UserCreateForm
-    template_name = "user_create.html"
+    template_name = "registration/user_create.html"
     success_url = reverse_lazy("profile")
 
     def form_valid(self, form):
@@ -23,7 +23,7 @@ class UserCreateView(CreateView):
 
 class ProfileCreateView(CreateView):
     form_class = ProfileCreationForm
-    template_name = "profile_create.html"
+    template_name = "registration/profile_create.html"
     success_url = reverse_lazy("login")
 
     def dispatch(self, request, *args, **kwargs):
@@ -38,5 +38,6 @@ class ProfileCreateView(CreateView):
         user = User.objects.get(id=user_id)
         form.instance.user = user
         return super().form_valid(form)
+
 
 
