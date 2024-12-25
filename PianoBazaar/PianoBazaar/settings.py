@@ -137,5 +137,5 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # LOGIN_REDIRECT_URL = "/sheetmusic/?login=ok"
 LOGIN_REDIRECT_URL = '/sheetmusic/'
-LOGIN_URL = '/login/?auth=notok'
+LOGIN_URL = 'login'
 

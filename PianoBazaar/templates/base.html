@@ -53,8 +53,10 @@
         {% block header %}{% endblock %}
     </div>
 
-    {% if welcome_message %}
-        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    {% block mex %}
+    {% if messages %}
+        <div class="toast-container position-fixed top-0 end-0 p-3">
+        {% for message in messages %}
           <div id="loginToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
                 {# <img src="/media/media/profiles/profile_imgs/dripping_cat.jpg" class="rounded me-2" alt="image_not_found"> per aggiungere li logo quando viene mandato il messaggio#}
@@ -63,9 +65,10 @@
               <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
             <div class="toast-body">
-                {{ welcome_message }}
+                {{ message }}
             </div>
           </div>
+        {% endfor %}
         </div>
         <script>
           document.addEventListener('DOMContentLoaded', () => {
@@ -74,6 +77,7 @@
           });
         </script>
     {% endif %}
+    {% endblock %}
 
      <section class="container-fluid mt-3">
         {% block content %}

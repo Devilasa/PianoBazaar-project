@@ -19,7 +19,7 @@ import profile
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, re_path, include
-from django.contrib.auth import views as auth_views
+from django.contrib.auth import views as auth_views, login
 
 from . import settings
 from .initcmds import init_db, erase_db
@@ -31,8 +31,8 @@ urlpatterns = [
 
     path("register/", UserCreateView.as_view(), name="register"),
     path("profile/", ProfileCreateView.as_view(), name="profile"),
-    path("login/", auth_views.LoginView.as_view(), name="login"),
-    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("login/", LoginViewCustom.as_view(), name="login"),
+    path("logout/", logout_view, name="logout"),
 ]
 
 if settings.DEBUG:

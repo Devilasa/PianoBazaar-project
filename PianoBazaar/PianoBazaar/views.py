@@ -1,15 +1,33 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth import logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.views import LoginView
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView
+from django.views.generic import CreateView
 
 from PianoBazaar.forms import ProfileCreationForm, UserCreateForm
-from sheetmusic.models import Profile
+from sheetmusic.models import Score
 
 
 def home(request):
     return render(request, template_name='home.html')
+
+class LoginViewCustom(LoginView):
+    def get(self, request, *args, **kwargs):
+        if 'next' in request.GET:
+            next_url = request.GET['next'].replace('/', '')
+            messages.warning(request, f'You need to login in order to access {next_url} page')
+        return super().get(request, *args, **kwargs)
+
+@login_required
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('sheetmusic:home')
+    return render(request, 'registration/logout.html', context= {'object_list' : Score.objects.all(),
+                                                                              'username' : request.user.username,})
 
 class UserCreateView(CreateView):
     form_class = UserCreateForm

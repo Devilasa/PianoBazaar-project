@@ -6,17 +6,13 @@ from django.views.generic import CreateView, ListView, DetailView
 from sheetmusic.forms import CreateSheetForm
 from sheetmusic.models import Score, Profile
 
-
-def sheetmusic_home(request):
-    return render(request, template_name='sheetmusic/home.html')
-
 class ScoreList(ListView):
     model = Score
     template_name = 'sheetmusic/home.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['welcome_message'] = self.request.session.pop('welcome_message', None)
+
         return context
 
 class CreateSheetMusic(CreateView):
