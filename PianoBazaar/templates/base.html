@@ -38,7 +38,7 @@
             <ul class="navbar-nav d-flex">
                 {% if page == 'scores' %}
                     <li class="nav-item ms-5">
-                        <a class="nav-link btn btn-primary border border-primary-subtle border-1" href="{% url 'sheetmusic:home' %}">Scores</a>
+                        <a class="nav-link btn btn-primary border border-primary-subtle" href="{% url 'sheetmusic:home' %}">Scores</a>
                     </li>
                 {% else %}
                     <li class="nav-item ms-5">
@@ -48,21 +48,21 @@
 
                 {% if page == 'upload score' %}
                     <li class="nav-item ms-5">
-                        <a class="nav-link btn btn-primary border border-primary-subtle border-1" href="{% url 'sheetmusic:create_sheet' %}">Upload score</a>
+                        <a class="nav-link btn btn-primary border border-primary-subtle" href="{% url 'sheetmusic:score_upload' %}">Upload score</a>
                     </li>
                 {% else %}
                     <li class="nav-item ms-5">
-                        <a class="nav-link btn btn-primary" href="{% url 'sheetmusic:create_sheet' %}">Upload score</a>
+                        <a class="nav-link btn btn-primary" href="{% url 'sheetmusic:score_upload' %}">Upload score</a>
                     </li>
                 {% endif %}
 
                 {% if page == 'profiles' %}
                     <li class="nav-item ms-5">
-                        <a class="nav-link btn btn-primary border border-primary-subtle border-1" href="#">Profiles</a>
+                        <a class="nav-link btn btn-primary border border-primary-subtle" href="{% url 'sheetmusic:profiles' %}">Profiles</a>
                     </li>
                 {% else %}
                     <li class="nav-item ms-5">
-                        <a class="nav-link btn btn-primary" href="#">Profiles</a>
+                        <a class="nav-link btn btn-primary" href="{% url 'sheetmusic:profiles' %}">Profiles</a>
                     </li>
                 {% endif %}
             </ul>

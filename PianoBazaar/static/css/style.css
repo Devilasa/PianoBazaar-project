@@ -110,17 +110,6 @@ footer.visible {
     animation: fa-beat 0.5s infinite;
 }
 
-#login_link_button {
-    /*color: white;*/
-    /*display: flex;*/
-    /*justify-content: flex-end;*/
-    /*width: 100%;*/
-    /*margin-left: auto;*/
-}
-
-
-
-
 .pagination {
     margin-top: 15px;
     display: flex;

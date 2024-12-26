@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView
 
-from sheetmusic.forms import CreateSheetForm
+from sheetmusic.forms import ScoreCreateForm
 from sheetmusic.models import Score, Profile
 
 class ScoreList(ListView):
@@ -14,23 +14,32 @@ class ScoreList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        context['page'] = 'scores'
         return context
 
-class CreateSheetMusic(LoginRequiredMixin, CreateView):
+class ScoreCreate(LoginRequiredMixin, CreateView):
     model = Score
-    form_class = CreateSheetForm
-    template_name = 'sheetmusic/create_sheet.html'
+    form_class = ScoreCreateForm
+    template_name = 'sheetmusic/score_create.html'
     success_url = reverse_lazy("sheetmusic:home")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['message'] = 'Load new sheetmusic'
+        context['page'] = 'upload score'
         return context
 
 class ScoreDetail(DetailView):
     model = Score
     template_name = 'sheetmusic/score_detail.html'
+
+class ArrangerList(ListView):
+    model = Profile
+    template_name = 'sheetmusic/arranger_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['page'] = 'profiles'
+        return context
 
 class ArrangerDetail(DetailView):
     model = Profile
