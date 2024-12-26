@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -15,7 +17,7 @@ class ScoreList(ListView):
 
         return context
 
-class CreateSheetMusic(CreateView):
+class CreateSheetMusic(LoginRequiredMixin, CreateView):
     model = Score
     form_class = CreateSheetForm
     template_name = 'sheetmusic/create_sheet.html'

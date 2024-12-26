@@ -26,8 +26,8 @@
 <body>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <a class="navbar-brand" href="/sheetmusic">🎵 PianoBazaar</a>
-        <form id="search-form" method="get" action="">
+        <a class="navbar-brand ms-4 me-5" href="/sheetmusic">🎵 PianoBazaar</a>
+        <form id="search-form" method="get" action="" class="d-flex">
             <label>
                 <input type="text" name="q" placeholder="Search..." value="{{ query }}">
             </label>
@@ -35,18 +35,22 @@
         </form>
 
             <!-- Links -->
-            <ul class="navbar-nav">
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'sheetmusic:home' %}">Scores</a>
+            <ul class="navbar-nav d-flex">
+              <li class="nav-item ms-5">
+                <a class="nav-link btn btn-primary" href="{% url 'sheetmusic:home' %}">Scores</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'sheetmusic:create_sheet' %}">Load score</a>
+              <li class="nav-item ms-5">
+                <a class="nav-link btn btn-primary" href="{% url 'sheetmusic:create_sheet' %}">Upload score</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#">Link 3</a>
+              <li class="nav-item ms-5">
+                <a class="nav-link btn btn-primary" href="#">Profiles</a>
               </li>
             </ul>
-
+            <ul class="navbar-nav ms-auto me-4">
+                <li class="nav-item">
+                    <a id="login_link_button" class="nav-link btn btn-primary" href="{% url 'login' %}">Log in</a>
+                </li>
+            </ul>
     </nav>
 
     <div class="jumbotron text-center mt-3" style="margin-bottom:0">

@@ -11,7 +11,7 @@ def erase_db():
     print("Erasing DB")
     Score.objects.all().delete()
     Copy.objects.all().delete()
-    User.objects.all().delete()
+    User.objects.filter(is_superuser=False).delete()
     Profile.objects.all().delete()
     for cover_jpg in os.listdir('media/scores/covers/'):
         target_file = os.path.join('media/scores/covers/', cover_jpg)

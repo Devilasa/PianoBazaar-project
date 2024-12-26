@@ -87,7 +87,7 @@ footer.visible {
         font-size: 18px; /* Dimensione del testo */
         /*font-weight: bold; !* Bold per il testo *!*/
         /*text-transform: uppercase; !* Maiuscolo *!*/
-        margin-left: 50px;
+        /*margin-left: 50px;*/
 }
 
 .navbar-nav .nav-item .nav-link:hover {
@@ -109,6 +109,15 @@ footer.visible {
 .nav-item .nav-link:hover .fab {
     animation: fa-beat 0.5s infinite;
 }
+
+#login_link_button {
+    /*color: white;*/
+    /*display: flex;*/
+    /*justify-content: flex-end;*/
+    /*width: 100%;*/
+    /*margin-left: auto;*/
+}
+
 
 .pagination {
     margin-top: 15px;
