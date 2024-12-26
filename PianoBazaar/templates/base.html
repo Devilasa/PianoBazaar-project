@@ -36,19 +36,39 @@
 
             <!-- Links -->
             <ul class="navbar-nav d-flex">
-              <li class="nav-item ms-5">
-                <a class="nav-link btn btn-primary" href="{% url 'sheetmusic:home' %}">Scores</a>
-              </li>
-              <li class="nav-item ms-5">
-                <a class="nav-link btn btn-primary" href="{% url 'sheetmusic:create_sheet' %}">Upload score</a>
-              </li>
-              <li class="nav-item ms-5">
-                <a class="nav-link btn btn-primary" href="#">Profiles</a>
-              </li>
+                {% if page == 'scores' %}
+                    <li class="nav-item ms-5">
+                        <a class="nav-link btn btn-primary border border-primary-subtle border-1" href="{% url 'sheetmusic:home' %}">Scores</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item ms-5">
+                        <a class="nav-link btn btn-primary" href="{% url 'sheetmusic:home' %}">Scores</a>
+                    </li>
+                {% endif %}
+
+                {% if page == 'upload score' %}
+                    <li class="nav-item ms-5">
+                        <a class="nav-link btn btn-primary border border-primary-subtle border-1" href="{% url 'sheetmusic:create_sheet' %}">Upload score</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item ms-5">
+                        <a class="nav-link btn btn-primary" href="{% url 'sheetmusic:create_sheet' %}">Upload score</a>
+                    </li>
+                {% endif %}
+
+                {% if page == 'profiles' %}
+                    <li class="nav-item ms-5">
+                        <a class="nav-link btn btn-primary border border-primary-subtle border-1" href="#">Profiles</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item ms-5">
+                        <a class="nav-link btn btn-primary" href="#">Profiles</a>
+                    </li>
+                {% endif %}
             </ul>
             <ul class="navbar-nav ms-auto me-4">
                 <li class="nav-item">
-                    <a id="login_link_button" class="nav-link btn btn-primary" href="{% url 'login' %}">Log in</a>
+                    <a id="login_link_button" class="nav-link btn btn-primary border border-primary-subtle" href="{% url 'login' %}">Log in</a>
                 </li>
             </ul>
     </nav>
