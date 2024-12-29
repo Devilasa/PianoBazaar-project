@@ -27,10 +27,21 @@ class Profile(models.Model):
     youtube_account_id = models.CharField(max_length=30, blank=True, null=True)
     instagram_account_id = models.CharField(max_length=30, blank=True, null=True)
     x_account_id = models.CharField(max_length=30, blank=True, null=True)
+    liked_scores = models.ManyToManyField('Score', related_name='liked_by', blank=True)
     purchased_scores = models.ManyToManyField('Score', through='Copy', blank=True, related_name='purchased_scores')
 
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
+
+    def toggle_like(self, score):
+        if self.liked_scores.filter(pk=score.pk).exists():
+            self.liked_scores.remove(score)
+            like = False
+        else:
+            self.liked_scores.add(score)
+            like = True
+        return like
+
 
 
 class Score(models.Model):

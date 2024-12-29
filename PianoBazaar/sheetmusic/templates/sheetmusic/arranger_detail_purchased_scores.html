@@ -14,4 +14,16 @@
         </div>
     </div>
         
+    <div id="card-container" class="d-flex flex-wrap justify-content-left mt-4 p-0">
+        {% for score in profile.purchased_scores.all %}
+            <div class="card m-2">
+                <img class="card-img-top" src="{{ score.cover.url }}" alt="{{ score.cover }}" style="width:100%">
+                <div class="card-body">
+                    <h4 class="card-title">{{ score.title }}</h4>
+                    <p class="card-text">a {{ score.score_type }} by {{ score.arranger }} in {{ score.published_key }}.</p>
+                    <a href="{% url 'sheetmusic:detail' pk=score.pk %}" class="btn btn-primary">See score</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}
