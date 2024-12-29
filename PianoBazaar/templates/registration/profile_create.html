@@ -7,8 +7,10 @@
     <div class="d-flex justify-content-center mt-2">
         <div class="card">
             <div class="card-header">
-                <h2 class="text-center">Registration page</h2>
-                <h5 class="text-center">Hello, in order to register please compile the following forms.</h5>
+                <h2 class="text-center mt-1 mb-2">Profile customization</h2>
+                <h5 class="text-center">This information will be shown on your profile page, please fill all the forms.</h5>
+                <h5 class="text-center">Adding more information help people to be more trusty towards your works.</h5>
+                <h5 class="text-center">You can always update this form later.</h5>
             </div>
             <div class="card-body">
                 <form method="post"> {% csrf_token %}
@@ -18,11 +20,6 @@
                     <input type="submit" class="btn btn-primary mt-2" value="Create Profile">
 
                 </form>
-            </div>
-            <div class="card-footer text-muted text-center">
-                <br>
-                <h5>Already have an account? <a href="{% url 'login' %}">Login here</a></h5>
-                <br>
             </div>
         </div>
     </div><br><br><br><br>

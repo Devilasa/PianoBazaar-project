@@ -1,3 +1,5 @@
+from datetime import date
+
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit
 from django import forms
@@ -32,14 +34,22 @@ class ProfileCreationForm(forms.ModelForm):
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 3}),
             'mantra': forms.Textarea(attrs={'rows': 3}),
-            'birth_date': forms.DateInput(attrs={'type': 'date', 'class': 'form-control', 'placeholder': 'YYYY-MM-DD'}),
+            'birth_date': forms.DateInput(attrs={'type': 'date', 'placeholder': 'YYYY-MM-DD'}),
+            'youtube_account_id': forms.TextInput(attrs={'placeholder': 'insert yt id or link to the account'}),
+            'instagram_account_id': forms.TextInput(attrs={'placeholder': 'insert ig id or link to the account'}),
+            'x_account_id': forms.TextInput(attrs={'placeholder': 'insert x id or link to the account'}),
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['profile_image'].help_text = "This will be shown on your profile page."
         self.fields['bio'].help_text = "Write a short bio about yourself."
         self.fields['mantra'].help_text = "Write a short phrase or statement that inspires and motivates you."
-        self.fields['youtube_account_id'].help_text = "You can also drop the link to your channel and we'll extract the id."
-        self.fields['instagram_account_id'].help_text = "Or the link to your account."
-        self.fields['x_account_id'].help_text = "Or the link to your account."
+
+    def clean_birth_date(self):
+        birth_date = self.cleaned_data.get('birth_date')
+        today = date.today()
+        age = today.year - birth_date.year - ((today.month, today.day) < (birth_date.month, birth_date.day))
+        if age <= 18 :
+            raise forms.ValidationError('You have to be at least 18 to sign up.')
+        return birth_date
+

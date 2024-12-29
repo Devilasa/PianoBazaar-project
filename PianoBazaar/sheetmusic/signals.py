@@ -10,9 +10,9 @@ from .models import Score, Profile
 def generate_cover_on_save(sender, instance, created, **kwargs):
 
     if created and instance.file:
-
         instance.set_pages_number()
         instance.set_pdf_first_page_as_cover()
+
 
 @receiver(user_logged_in)
 def add_login_message(sender, request, user, **kwargs):

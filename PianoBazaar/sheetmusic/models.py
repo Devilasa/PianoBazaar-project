@@ -20,10 +20,10 @@ def validate_pdf(file):
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_image = models.FileField(upload_to='media/profiles/profile_imgs', default='media/profiles/profile_imgs/profile-default.256x256.png', blank=True, null=True)
+    profile_image = models.FileField(upload_to='media/profiles/profile_imgs', default='media/profiles/profile_imgs/profile-default.1024x1023.png', blank=True, null=True)
     bio = models.TextField(max_length=400, blank=True)
     mantra = models.TextField(max_length=100, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+    birth_date = models.DateField(null=True)
     youtube_account_id = models.CharField(max_length=30, blank=True, null=True)
     instagram_account_id = models.CharField(max_length=30, blank=True, null=True)
     x_account_id = models.CharField(max_length=30, blank=True, null=True)

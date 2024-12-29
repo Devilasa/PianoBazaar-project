@@ -85,7 +85,7 @@
                         <div class="card-body">
                         <h4 class="card-title">{{ score.title }}</h4>
                         <p class="card-text">a {{ score.score_type }} by {{ score.arranger }} in {{ score.published_key }}.</p>
-                        <a href="{% url 'sheetmusic:detail' pk=score.pk %}" class="btn btn-info">See score</a>
+                        <a href="{% url 'sheetmusic:detail' pk=score.pk %}" class="btn btn-primary">See score</a>
                         </div>
                     </div>
                 {% endfor %}

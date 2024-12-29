@@ -6,7 +6,7 @@
 {% block mex %}
     {% if messages %}
          {% for message in messages %}
-            <div class="h5 text-center alert alert-danger fade show" role="alert">
+            <div class="h5 text-center alert alert-{{ message.tags }} {{ message.extra_tags }} fade show" role="alert">
                 {{ message }}
             </div>
         {% endfor %}
