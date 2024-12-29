@@ -1,0 +1,42 @@
+{%  extends 'base.html' %}
+
+{% block title %} PianoBazaar - profiles {% endblock %}
+
+
+{% block content %}
+    <div class="container-fluid mt-3">
+        <div id="card-container" class="d-flex flex-wrap justify-content-center bg-dark">
+            {% for arranger in object_list %}
+                <div class="card border-primary-subtle m-2" style="max-width: 22rem;">
+
+                    <div class="card-header">
+                        <h4 class="card-title">@{{ arranger.user.username }}</h4>
+                        <h5 class="card-title"> aka {{ arranger.user.first_name }} {{ arranger.user.last_name}}</h5>
+                    </div>
+
+{#                    <img class="card-img" src="{{ arranger.profile_image.url }}" alt="media/profiles/profile_imgs/profile-default.256x256.png" style="width:200px; height: 200px;">#}
+                    <div class="d-flex justify-content-center align-items-center">
+                        <img class="img-fluid" src="{{ arranger.profile_image.url }}" alt="media/profiles/profile_imgs/profile-default.256x256.png" style="width: 100%; height: 18rem; object-fit: cover">
+                    </div>
+
+                    <div class="card-body">
+
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item ps-1">
+                                <p style="font-size: 1.1rem" class="card-text ms-0">Has published a total of {{ arranger.score_count }} scores.</p>
+                            </li>
+                            <li class="list-group-item ps-1 mb-1">
+                                <p style="font-size: 1.1rem" class="card-text">Like received: </p>
+                            </li>
+                        </ul>
+                        <a href="{% url 'sheetmusic:arranger' pk=arranger.pk %}" class="btn btn-primary stretched-link">See profile</a>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    </div><br>
+{% endblock %}
+
+
+

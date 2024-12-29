@@ -10,7 +10,6 @@ class ScoreCreateForm(forms.ModelForm):
     helper = FormHelper()
     helper.form_id = 'load sheetmusic form'
     helper.form_method = 'POST'
-
     helper.add_input(Submit('submit', 'Upload sheetmusic', css_class='mt-2'))
 
     class Meta:

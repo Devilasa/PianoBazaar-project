@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Count
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -35,6 +36,9 @@ class ScoreDetail(DetailView):
 class ArrangerList(ListView):
     model = Profile
     template_name = 'sheetmusic/arranger_list.html'
+
+    def get_queryset(self):
+        return Profile.objects.annotate(score_count=Count('score'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

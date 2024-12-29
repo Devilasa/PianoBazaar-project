@@ -112,7 +112,7 @@ class Score(models.Model):
     )
 
     title = models.CharField(max_length=50)
-    arranger = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    arranger = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='score')
     price = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(1), MaxValueValidator(300)])
     scoring = models.CharField(max_length=50, choices=SCORING_CHOICES)
     score_type = models.CharField(max_length=50, choices=PIECE_TYPE_CHOICES)
