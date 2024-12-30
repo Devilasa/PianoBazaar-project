@@ -1,6 +1,8 @@
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView
 
@@ -8,6 +10,7 @@ from sheetmusic.forms import ScoreCreateForm
 from sheetmusic.models import Score, Profile
 
 
+@login_required(login_url='sheetmusic:home')
 def like_score(request, score_pk):
     score = Score.objects.get(pk=score_pk)
     profile = request.user.profile
@@ -22,11 +25,15 @@ class ScoreList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page'] = 'scores'
+        if 'next' in self.request.GET:
+            messages.warning(self.request, 'You need to login in order to like scores.')
         try:
             context['arranger'] = Profile.objects.get(user=self.request.user)
         except:
             pass
         return context
+
+
 
 class ScoreCreate(LoginRequiredMixin, CreateView):
     model = Score
