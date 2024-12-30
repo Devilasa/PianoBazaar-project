@@ -4,17 +4,24 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
-from sheetmusic.forms import ScoreCreateForm
-from sheetmusic.models import Score, Profile
+from sheetmusic.forms import ScoreCreateForm, CheckoutForm
+from sheetmusic.models import Score, Profile, BillingProfile
 
 
-@login_required(login_url='sheetmusic:home')
+@login_required
 def like_score(request, score_pk):
     score = Score.objects.get(pk=score_pk)
     profile = request.user.profile
     profile.toggle_like(score)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
+
+@login_required
+def add_score_to_shopping_chart(request, score_pk):
+    score = Score.objects.get(pk=score_pk)
+    profile = request.user.profile
+    profile.add_to_shopping_cart(score)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
 
 
@@ -32,7 +39,6 @@ class ScoreList(ListView):
         except:
             pass
         return context
-
 
 
 class ScoreCreate(LoginRequiredMixin, CreateView):
@@ -91,4 +97,11 @@ class ArrangerDetailPurchasedScores(DetailView):
         context = super().get_context_data(**kwargs)
 
         return context
+
+
+class Checkout(LoginRequiredMixin, UpdateView):
+    model = Profile
+    form_class = CheckoutForm
+    template_name = 'sheetmusic/checkout.html'
+
 

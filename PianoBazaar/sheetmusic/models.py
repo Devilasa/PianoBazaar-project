@@ -15,8 +15,8 @@ def validate_pdf(file):
     try:
         PdfReader(file)
     except Exception:
-        # File must be in PDF format.
-        raise ValidationError('Oops! It seems the uploaded file is not a valid PDF. Make sure to upload a proper PDF file and try again.')
+        # Oops! It seems the uploaded file is not a valid PDF. Make sure to upload a proper PDF file and try again.
+        raise ValidationError('File must be in PDF format.')
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -28,6 +28,7 @@ class Profile(models.Model):
     instagram_account_id = models.CharField(max_length=30, blank=True, null=True)
     x_account_id = models.CharField(max_length=30, blank=True, null=True)
     liked_scores = models.ManyToManyField('Score', related_name='liked_by', blank=True)
+    shopping_cart = models.ManyToManyField('Score', related_name='in_shopping_cart', blank=True)
     purchased_scores = models.ManyToManyField('Score', through='Copy', blank=True, related_name='purchased_scores')
 
     def __str__(self):
@@ -42,6 +43,24 @@ class Profile(models.Model):
             like = True
         return like
 
+    def add_to_shopping_cart(self, score):
+        if not self.shopping_cart.filter(pk=score.pk).exists():
+            self.shopping_cart.add(score)
+            return True
+        return False
+
+
+
+class BillingProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    country = models.CharField(max_length=100, blank=True, null=True)
+    region = models.CharField(max_length=100, blank=True, null=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
+    postal_code = models.CharField(max_length=100, blank=True, null=True)
+    billing_address = models.CharField(max_length=100, blank=True, null=True)
+
+    def __str__(self):
+        return f'billing information: country: {self.country}, region: {self.region}, city: {self.city}, postal code: {self.postal_code}, billing address: {self.billing_address}'
 
 
 class Score(models.Model):
@@ -201,4 +220,4 @@ class Copy(models.Model):
     score = models.ForeignKey(Score, on_delete=models.CASCADE)
     purchase_date = models.DateField(auto_now=False, auto_now_add=True)
     buyer = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=1, validators=[MinValueValidator(1), MaxValueValidator(30)])
+    license = models.CharField(max_length=50, null=True, blank=True)

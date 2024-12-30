@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+        <div class="row">
+            
+            <div class="col-md-3 offset-1">
+                
+                {% crispy form %}
+                
+            </div>
+            
+            <div class="col-md-6 offset-md-1"> 
+                <table class="table table-bordered">
+                    
+                    <thead>
+                        <tr>
+                            <th>Item description</th> <th>Quantity</th> <th>Price</th> <th>Total</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <tr>
+                            <td>
+                                <img src="{{product.image.url}}" alt="{{product.name}}" class="img-responsive"></img>
+                            </td> <td>Doe</td> <td>john@example.com</td> <td>$10.00</td>
+                        </tr>
+                    </tbody>
+                    
+                </table>
+            
+            </div>
+        </div>
+{% endblock %}

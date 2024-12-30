@@ -3,7 +3,7 @@ from crispy_forms.layout import Submit, Layout, Field
 from crispy_forms.templatetags.crispy_forms_field import css_class
 from django import forms
 
-from sheetmusic.models import Score
+from sheetmusic.models import Score, BillingProfile
 
 
 class ScoreCreateForm(forms.ModelForm):
@@ -20,3 +20,13 @@ class ScoreCreateForm(forms.ModelForm):
             'title' : forms.TextInput(attrs={'placeholder': 'Insert title'}),
             'youtube_video_link' : forms.TextInput(attrs={'placeholder': 'https://www.youtube.com/watch?v=dD1Y6LiSBVo'}),
         }
+
+class CheckoutForm(forms.ModelForm):
+    helper = FormHelper()
+    helper.form_id = 'purchase checkout form'
+    helper.form_method = 'POST'
+    helper.add_input(Submit('submit', 'Purchase', css_class='mt-2'))
+
+    class Meta:
+        model = BillingProfile
+        exclude = ['user']

@@ -5,7 +5,8 @@ from decimal import Decimal
 from django.conf.global_settings import MEDIA_URL
 from django.contrib.auth.models import User
 
-from sheetmusic.models import Score, Profile, Copy
+from sheetmusic.models import Score, Profile, Copy, BillingProfile
+
 
 def erase_db():
     print("Erasing DB")
@@ -100,6 +101,8 @@ def init_db():
             print(f'profile {user.username} created!')
         else:
             print(f'profile {user.username} already exists!')
+
+        BillingProfile.objects.create(user=user)
 
     scores_data = [
         {

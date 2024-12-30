@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="container-fluid mt-3">
+    <div class="container-fluid mt-2">
         <div class="row">
         <!-- Card Sinistra -->
             <div class="col-md-4">
@@ -12,6 +12,7 @@
 
             <!-- Descrizione Destra -->
             <div class="col-md-5 offset-md-2">
+                
                 <p class="h1">{{ object.title }}</p>
                 <p class="h4 d-inline">by </p>
                 <a id="arranger-profile-link" class="h4 d-inline link-primary" style="text-decoration: none" href="{% url 'sheetmusic:arranger' object.arranger.pk %}"> {{ object.arranger }}</a>
@@ -27,13 +28,24 @@
                     <li class="list-group-item"><strong>Publication Date:</strong> {{ object.publication_date|date:"d M Y" }}</li>
                     <li class="list-group-item"><strong>Format:</strong> PDF</li>
                 </ul>
-
-                <!-- Pulsante di Azione -->
-                <a href="#" class="btn btn-primary mt-4">Buy</a>
-                <br><br>
+            
+                <div class="d-flex align-items-center mb-3 mt-3">
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'sheetmusic:checkout' pk=score.arranger.pk %}" class="btn btn-primary me-2"><p class="h5 mb-1 mt-1" style="height: 23px">Buy</p></a>
+                    {% else %}
+                        <a href="{% url 'login' %}?next=/sheetmusic/detail/{{ object.pk }}" class="btn btn-primary me-2"><p class="h5 mb-1 mt-1" style="height: 23px">Buy</p></a>
+                    {% endif %}
+                
+                    <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:add_score_to_shopping_chart' score_pk=score.pk %}">
+                        <p class="h5 d-inline">Add to cart </p>
+                        <i class="fa-solid fa-cart-shopping d-inline" style="font-size: 1.8rem; color: white"></i>
+                    </a>
+                
+                </div>
+            
                 <!-- Video -->
                 {% if score.youtube_video_link %}
-                    <div class="ratio ratio-16x9">
+                    <div class="ratio ratio-16x9 mb-3">
                         <iframe class="embed-responsive-item" 
                                 src="https://www.youtube.com/embed/{{ score.get_youtube_video_id_from_link }}" 
                                 allowfullscreen>
