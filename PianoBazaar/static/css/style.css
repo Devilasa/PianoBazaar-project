@@ -110,15 +110,12 @@ footer.visible {
     animation: fa-beat 0.5s infinite;
 }
 
-.dropdown:hover .dropdown-menu {
-   color: white;
-}
-
 .dropdown:hover .dropdown-toggle {
     color: white; /* Cambia il colore o stile per indicare l'hover */
 }
 
-.dropdown-menu:hover {
+.navbar-nav .nav-item .dropdown .dropdown-menu .dropdown-item.nav-link:hover {
+    background-color: #0d6efd;
     color: white;
 }
 

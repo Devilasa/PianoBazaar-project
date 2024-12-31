@@ -1,9 +1,14 @@
 from .models import Profile
 
 def user_profile_context(request):
+    context = {}
+
     if request.user.is_authenticated:
         try:
-            return {'user_profile': Profile.objects.get(user=request.user)}
+            context['user_profile'] = Profile.objects.get(user=request.user)
         except Profile.DoesNotExist:
-            return {'user_profile': None}
-    return {}
+            context['user_profile'] = None
+
+    context['logout_modal'] = request.session.pop('logout_modal', None)
+
+    return context

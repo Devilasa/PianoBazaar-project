@@ -20,8 +20,10 @@ def logout_view(request):
     if request.method == 'POST':
         logout(request)
         return redirect('sheetmusic:home')
-    return render(request, 'registration/logout.html', context= {'object_list' : Score.objects.all(),
-                                                                              'username' : request.user.username,})
+
+    previous_url = request.META.get('HTTP_REFERER', '/sheetmusic/')
+    request.session['logout_modal'] = 'show'
+    return redirect(previous_url)
 
 class LoginViewCustom(LoginView):
     def get(self, request, *args, **kwargs):
@@ -57,7 +59,6 @@ class ProfileCreateView(SuccessMessageMixin, CreateView):
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form): # Serve per aggiungere azioni aggiuntive post form-validation prima della reindirizzazione. Questo approccio è più chiaro, segue le best practices di Django ed è facile da mantenere
-        # Recupera l'utente dalla sessione
         user_id = self.request.session.pop('new_user_id')  # Rimuovi l'ID dalla sessione
         user = User.objects.get(id=user_id)
         form.instance.user = user
