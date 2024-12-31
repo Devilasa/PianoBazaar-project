@@ -3,32 +3,64 @@
 
 {% block content %}
         <div class="row">
-            
-            <div class="col-md-3 offset-1">
-                
-                {% crispy form %}
-                
-            </div>
-            
-            <div class="col-md-6 offset-md-1"> 
+
+            <div class="col-6 ms-5 overflow-auto" style="max-height: 80vh;">
                 <table class="table table-bordered">
-                    
-                    <thead>
+
+                    <thead class="table">
                         <tr>
                             <th>Item description</th> <th>Quantity</th> <th>Price</th> <th>Total</th>
                         </tr>
                     </thead>
-                    
+
+
                     <tbody>
-                        <tr>
+                        {% for score in profile.shopping_cart.all %}
+                        <tr> {#table-row#}
                             <td>
-                                <img src="{{product.image.url}}" alt="{{product.name}}" class="img-responsive"></img>
-                            </td> <td>Doe</td> <td>john@example.com</td> <td>$10.00</td>
+                                <div class="d-flex justify-content-between">
+
+                                    <div class="card m-2 custom-card-shadow" style="width:250px;">
+                                        <img class="card-img" src="{{ score.cover.url }}" alt="{{ score.cover }}" style="width:100%">
+                                    </div>
+
+                                    <div class="col-7">
+                                        <p class="mt-4"><a class="h3 link-primary" style="text-decoration: none;" href="{% url 'sheetmusic:detail' score.pk %}"> {{ score.title }}</a></p>
+                                        <p class="h4 d-inline">by </p>
+                                        <a id="arranger-profile-link" class="h4 d-inline link-primary" style="text-decoration: none;" href="{% url 'sheetmusic:arranger' score.arranger.pk %}"> {{ score.arranger }}</a>
+                                        <p class="h5 mt-3"> {{ score.scoring }} </p>
+                                        <P class="h5 mt-3"> pages: {{ score.pages }} </P>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-muted h5">Unlimited Prints</td>
+
+                            <td>{{ score.price }}€</td>
+
+                            <td>{{ score.price }}€</td>
                         </tr>
+                        {% endfor %}
                     </tbody>
-                    
+
                 </table>
-            
+
+            </div>
+
+            <div class="col-md-3 offset-1">
+                <p class="h3">Billing Information</p>
+                {% crispy form %}
+
+                <br>
+
+                <p class="h3 mt-3 mb-3">Total: {{ total_price }} €</p>
+
+                <label for="payment-method" class="h4 form-label mt-3">Select payment method
+                    <select class="form-select mt-2" id="payment-method">
+                      <option>Paypal</option>
+                      <option>Credit Card</option>
+                      <option>Bank Transfer</option>
+                    </select>
+                </label>
             </div>
         </div>
 {% endblock %}

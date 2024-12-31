@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
@@ -16,6 +17,7 @@ def like_score(request, score_pk):
     profile = request.user.profile
     profile.toggle_like(score)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
+
 
 @login_required
 def manage_score_for_shopping_cart(request, score_pk):
@@ -80,30 +82,37 @@ class ArrangerDetail(DetailView):
         context['my_scores_list'] = Score.objects.filter(arranger=self.object)
         return context
 
+
 class ArrangerDetailLikedScores(DetailView):
     model = Profile
     template_name = 'sheetmusic/arranger_detail_liked_scores.html'
     context_object_name = 'profile'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        return context
 
 class ArrangerDetailPurchasedScores(DetailView):
     model = Profile
     template_name = 'sheetmusic/arranger_detail_purchased_scores.html'
     context_object_name = 'profile'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        return context
-
+@login_required
+def pre_checkout(request, score_pk):
+    score = Score.objects.get(pk=score_pk)
+    profile = request.user.profile
+    profile.add_score_to_shopping_cart(score)
+    return redirect('sheetmusic:checkout', profile.pk)
 
 class Checkout(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = CheckoutForm
     template_name = 'sheetmusic/checkout.html'
+    context_object_name = 'profile'
 
-
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = Profile.objects.get(user=self.request.user.pk)
+        total_price = 0
+        for score in profile.shopping_cart.all():
+            total_price += float(score.price)
+        total_price = round(total_price, 2)
+        context['total_price'] = total_price
+        return context

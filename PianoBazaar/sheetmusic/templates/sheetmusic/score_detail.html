@@ -32,7 +32,7 @@
                 <div class="d-flex align-items-center mb-3 mt-3">
                 
                     {% if user.is_authenticated %}
-                        <a href="{% url 'sheetmusic:checkout' pk=score.arranger.pk %}" class="btn btn-primary me-2"><p class="h5 mb-1 mt-1" style="height: 23px">Buy</p></a>
+                        <a href="{% url 'sheetmusic:pre_checkout' score_pk=object.pk %}" class="btn btn-primary me-2"><p class="h5 mb-1 mt-1" style="height: 23px">Buy</p></a>
                         
                         {% if object in user_profile.shopping_cart.all %}
                              <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:add_score_to_shopping_cart' score_pk=object.pk %}">

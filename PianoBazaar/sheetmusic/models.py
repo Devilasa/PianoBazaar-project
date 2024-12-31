@@ -52,14 +52,23 @@ class Profile(models.Model):
             is_in_the_cart = True
         return is_in_the_cart
 
+    def add_score_to_shopping_cart(self, score):
+        if not self.shopping_cart.filter(pk=score.pk).exists():
+            self.shopping_cart.add(score)
+        return
+
+    def remove_score_to_shopping_cart(self, score):
+        if self.shopping_cart.filter(pk=score.pk).exists():
+            self.shopping_cart.remove(score)
+        return
 
 class BillingProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    country = models.CharField(max_length=100, blank=True, null=True)
-    region = models.CharField(max_length=100, blank=True, null=True)
-    city = models.CharField(max_length=100, blank=True, null=True)
-    postal_code = models.CharField(max_length=100, blank=True, null=True)
-    billing_address = models.CharField(max_length=100, blank=True, null=True)
+    country = models.CharField(max_length=100, null=True)
+    region = models.CharField(max_length=100, null=True)
+    city = models.CharField(max_length=100, null=True)
+    postal_code = models.CharField(max_length=100, null=True)
+    billing_address = models.CharField(max_length=100, null=True)
 
     def __str__(self):
         return f'billing information: country: {self.country}, region: {self.region}, city: {self.city}, postal code: {self.postal_code}, billing address: {self.billing_address}'

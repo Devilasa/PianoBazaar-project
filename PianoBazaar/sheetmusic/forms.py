@@ -30,3 +30,7 @@ class CheckoutForm(forms.ModelForm):
     class Meta:
         model = BillingProfile
         exclude = ['user']
+
+        widgets = {
+            # 'country' : forms.TextInput(attrs={'placeholder': 'Country'}),
+        }
