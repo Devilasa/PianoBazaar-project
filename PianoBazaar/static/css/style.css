@@ -110,6 +110,18 @@ footer.visible {
     animation: fa-beat 0.5s infinite;
 }
 
+.dropdown:hover .dropdown-menu {
+   color: white;
+}
+
+.dropdown:hover .dropdown-toggle {
+    color: white; /* Cambia il colore o stile per indicare l'hover */
+}
+
+.dropdown-menu:hover {
+    color: white;
+}
+
 .pagination {
     margin-top: 15px;
     display: flex;

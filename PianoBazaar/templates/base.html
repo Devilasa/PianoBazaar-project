@@ -68,11 +68,29 @@
                     </li>
                 {% endif %}
             </ul>
+        {% if user.is_authenticated %}
+            <ul class="navbar-nav ms-auto me-4">
+                <li class="nav-item">
+{#                    <a id="login_link_button" class="nav-link btn btn-primary border border-primary-subtle" href="{% url 'login' %}">{{ user.username }}</a>#}
+                    <div class="dropdown dropstart text-end">
+                      <button type="button" class="nav-link btn btn-primary dropdown-toggle border border-primary-subtle" data-bs-toggle="dropdown">
+                          {{ user.username }}
+                      </button>
+                      <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="{% url 'sheetmusic:arranger' pk=user_profile.id %}">My Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Sales Insights</a></li>
+                        <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                      </ul>
+                    </div>
+                </li>
+            </ul>
+        {% else %}
             <ul class="navbar-nav ms-auto me-4">
                 <li class="nav-item">
                     <a id="login_link_button" class="nav-link btn btn-primary border border-primary-subtle" href="{% url 'login' %}">Log in</a>
                 </li>
             </ul>
+        {% endif %}
     </nav>
 
     <div class="jumbotron text-center mt-3" style="margin-bottom:0">

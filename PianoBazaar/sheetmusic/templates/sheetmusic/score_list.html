@@ -15,7 +15,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <a href="{% url 'sheetmusic:detail' pk=score.pk %}" class="btn btn-primary">See score</a>
                         
-                            {% if score in arranger.liked_scores.all %}
+                            {% if score in user_profile.liked_scores.all %}
                                 <a class="" href="{% url 'sheetmusic:add_liked_score' score_pk=score.pk %}">
                                     <i class="fa-solid fa-heart me-3" style="font-size: 1.5rem; color: red"></i>
                                 </a>

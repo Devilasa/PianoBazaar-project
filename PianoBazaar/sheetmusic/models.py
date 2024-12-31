@@ -43,12 +43,14 @@ class Profile(models.Model):
             like = True
         return like
 
-    def add_to_shopping_cart(self, score):
-        if not self.shopping_cart.filter(pk=score.pk).exists():
+    def toggle_score_in_shopping_cart(self, score):
+        if self.shopping_cart.filter(pk=score.pk).exists():
+            self.shopping_cart.remove(score)
+            is_in_the_cart = False
+        else:
             self.shopping_cart.add(score)
-            return True
-        return False
-
+            is_in_the_cart = True
+        return is_in_the_cart
 
 
 class BillingProfile(models.Model):

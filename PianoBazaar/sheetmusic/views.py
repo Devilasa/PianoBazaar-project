@@ -18,11 +18,13 @@ def like_score(request, score_pk):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
 
 @login_required
-def add_score_to_shopping_chart(request, score_pk):
+def manage_score_for_shopping_cart(request, score_pk):
     score = Score.objects.get(pk=score_pk)
     profile = request.user.profile
-    profile.add_to_shopping_cart(score)
+    profile.toggle_score_in_shopping_cart(score)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
+    # si genera un errore quando l'utente cerca di metterlo nel carrello da non loggato perchè dopo aver fatto il login vieni reindirizzato
+    # a questa pagina che però ti reinderizza alla pagina che chiama questa vista quindi ritorna nella pagina di login_required (la logica viene però eseguita correttamente)
 
 
 class ScoreList(ListView):
@@ -34,10 +36,6 @@ class ScoreList(ListView):
         context['page'] = 'scores'
         if 'next' in self.request.GET:
             messages.warning(self.request, 'You need to login in order to like scores.')
-        try:
-            context['arranger'] = Profile.objects.get(user=self.request.user)
-        except:
-            pass
         return context
 
 
@@ -55,6 +53,10 @@ class ScoreCreate(LoginRequiredMixin, CreateView):
 class ScoreDetail(DetailView):
     model = Score
     template_name = 'sheetmusic/score_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context
 
 class ArrangerList(ListView):
     model = Profile
