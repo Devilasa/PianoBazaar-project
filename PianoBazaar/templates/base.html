@@ -29,13 +29,14 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-light bg-light">
         <a class="navbar-brand ms-4 me-5" href="/sheetmusic">🎵 PianoBazaar</a>
-        <form id="search-form" method="get" action="/sheetmusic/" class="d-flex">
-            <label>
-                <input type="text" name="q" placeholder="Search..." value="{{ query }}">
-            </label>
-        <button id="search-button" type="submit">🔍</button>
-        </form>
-
+        {% block search_form %}
+            <form id="search-form" method="get" action="/sheetmusic/" class="d-flex">
+                <label>
+                    <input type="text" name="q" placeholder="Search..." value="{{ query }}">
+                </label>
+                <button id="search-button" type="submit">🔍</button>
+            </form>
+        {% endblock %}
             <!-- Links -->
             <ul class="navbar-nav d-flex">
                 {% if page == 'scores' %}

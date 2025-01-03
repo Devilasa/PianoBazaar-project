@@ -3,8 +3,8 @@ import profile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Sum, F, Q
-from django.db.models.functions import Round
+from django.db.models import Count, Sum, F, Q, Value
+from django.db.models.functions import Round, Concat
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.template.context_processors import request
@@ -42,9 +42,8 @@ class ScoreList(ListView):
     def get(self, request, *args, **kwargs):
         if 'q' in self.request.GET:
             s_string = self.request.GET['q'] or None
-            print(s_string)
             if s_string is not None:
-                return redirect('sheetmusic:search_scores', s_string=s_string)
+                return redirect('sheetmusic:search_score', s_string=s_string)
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -55,8 +54,7 @@ class ScoreList(ListView):
         return context
 
 
-
-class SearchScoreList(ListView):
+class SearchScore(ListView):
     model = Score
     template_name = 'sheetmusic/score_search_results.html'
 
@@ -126,6 +124,13 @@ class ArrangerList(ListView):
     model = Profile
     template_name = 'sheetmusic/arranger_list.html'
 
+    def get(self, request, *args, **kwargs):
+        if 'q' in self.request.GET:
+            s_string = self.request.GET['q'] or None
+            if s_string is not None:
+                return redirect('sheetmusic:search_profile', s_string=s_string)
+        return super().get(request, *args, **kwargs)
+
     def get_queryset(self):
         return Profile.objects.annotate(
             score_count=Count('score', distinct=True),
@@ -136,6 +141,24 @@ class ArrangerList(ListView):
         context = super().get_context_data(**kwargs)
         context['page'] = 'profiles'
         return context
+
+class SearchProfile(ListView):
+    model = Profile
+    template_name = 'sheetmusic/profile_search_results.html'
+
+    def get_queryset(self):
+        s_string = self.request.resolver_match.kwargs['s_string']
+
+        result_scores = Profile.objects.annotate(
+            full_name = Concat('user__first_name', Value(' '), 'user__last_name')
+        ).filter(
+            Q(user__username__icontains=s_string) |
+            Q(user__first_name__icontains=s_string) |
+            Q(user__last_name__icontains=s_string) |
+            Q(full_name__icontains=s_string)
+        )
+        return result_scores
+
 
 class ArrangerDetail(DetailView):
     model = Profile
@@ -163,6 +186,7 @@ class ArrangerDetailPurchasedScores(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = 'sheetmusic/arranger_detail_purchased_scores.html'
     context_object_name = 'profile'
+
 
 class ArrangerViewShoppingCart(LoginRequiredMixin, DetailView):
     model = Profile
