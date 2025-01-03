@@ -18,10 +18,12 @@
                             {% if score in user_profile.liked_scores.all %}
                                 <a class="like-btn" data-score-id="{{ score.pk }}" href="{% url 'sheetmusic:toggle_like' score_pk=score.pk %}">
                                     <i class="fa-solid fa-heart me-3 like-icon" style="font-size: 1.5rem; color: red"></i>
+                                <div class="particle-container"></div>
                                 </a>
                             {% else %}
                                 <a class="like-btn" data-score-id="{{ score.pk }}"  href="{% url 'sheetmusic:toggle_like' score_pk=score.pk %}">
                                     <i class="fa-regular fa-heart me-3 like-icon" style="font-size: 1.5rem; color: grey"></i>
+                                <div class="particle-container"></div>
                                 </a>
                             {% endif %}
                         
@@ -43,6 +45,9 @@
                         const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                         const scoreId = this.getAttribute('data-score-id');
                         const likeIcon = this.querySelector('.like-icon');
+                        const particleContainer = this.querySelector('.particle-container');
+                        
+                        createParticles(particleContainer);
                         
                         const xhttp = new XMLHttpRequest();
                         xhttp.open('POST', `/sheetmusic/toggle-like/${scoreId}/`, true);
@@ -67,8 +72,22 @@
                     xhttp.send();
                     });
                 });
-            });            
-            setTimeout(() => heartIcon.classList.remove('animate-like'), 300); 
+                function createParticles(container) {
+                    for (let i = 0; i < 10; i++) {
+                        const particle = document.createElement('div');
+                        particle.classList.add('particle');
+                        
+                        // Genera una posizione casuale per l'esplosione
+                        particle.style.setProperty('--x', (Math.random() - 0.5) * 2);  // Valori tra -1 e 1
+                        particle.style.setProperty('--y', (Math.random() - 0.5) * 2);
+                        
+                        container.appendChild(particle);
+                        
+                        // Rimuove le particelle dopo l'animazione
+                        particle.addEventListener('animationend', () => particle.remove());
+                    }
+                }
+            });
         </script>
     {% else %}
         
