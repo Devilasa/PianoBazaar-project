@@ -9,7 +9,9 @@
             <ul class="pagination pagination-lg">
                 <li class="page-item"><a class="page-link" href="{% url 'sheetmusic:arranger' profile.pk %}" >My Sheet music</a></li>
                 <li class="page-item"><a class="page-link" href="{% url 'sheetmusic:arranger_liked_scores' profile.pk %}">Liked scores</a></li>
-                <li class="page-item active"><a class="page-link" href="">Purchased scores</a></li>
+                {% if profile.pk == user_profile.pk %}
+                    <li class="page-item active"><a class="page-link" href="">Purchased scores</a></li>
+                {% endif%}
             </ul>
         </div>
     </div>

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+        <div class="row">
+            <div class="col-6 ms-5 overflow-auto" style="max-height: 80vh;">
+                <table class="table table-bordered">
+
+                    <thead class="table table-dark">
+                        <tr>
+                            <th>Items for sale</th> <th>Sold copies</th> <th>Price</th> <th>Item revenue</th>
+                        </tr>
+                    </thead>
+
+
+                    <tbody>
+                        {% for score in score_with_earnings %}
+                        <tr>
+                            <td>
+                                <div class="d-flex justify-content-between">
+
+                                    <div class="card m-2 custom-card-shadow" style="width:250px;">
+                                        <img class="card-img" src="{{ score.cover.url }}" alt="{{ score.cover }}" style="width:100%">
+                                    </div>
+
+                                    <div class="col-7">
+                                        <p class="mt-4"><a class="h3 link-primary" style="text-decoration: none;" href="{% url 'sheetmusic:detail' score.pk %}"> {{ score.title }}</a></p>
+                                        <p class="h4 d-inline">by </p>
+                                        <p class="h4 d-inline"> {{ score.arranger }}</p>
+                                        <p class="h5 mt-3"> {{ score.scoring }} </p>
+                                        <P class="h5 mt-3"> pages: {{ score.pages }} </P>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="h5">{{ score.n_sold_copies|default:0 }}</td>
+
+                            <td>{{ score.price }}€</td>
+
+                            <td>{{ score.total_earnings|floatformat:2|default:0 }}€</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        
+            <div class="col-3 offset-1">
+                <p class="h3">Total Revenue: {{ total_earnings }}€</p>
+            </div>
+        </div>
+{% endblock %}

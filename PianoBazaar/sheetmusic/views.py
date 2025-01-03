@@ -1,16 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count
+from django.db.models import Count, Sum, F
+from django.db.models.functions import Round
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, DetailView, UpdateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from PianoBazaar.forms import ProfileCreationForm
 from sheetmusic.context_processor import user_profile_context
 from sheetmusic.forms import ScoreCreateForm, CheckoutForm, ProfileUpdateForm
-from sheetmusic.models import Score, Profile, BillingProfile
+from sheetmusic.models import Score, Profile, BillingProfile, Copy
 
 
 @login_required
@@ -58,6 +59,9 @@ class ScoreCreate(LoginRequiredMixin, CreateView):
         profile = Profile.objects.get(user=user)
         form.instance.arranger = profile
         return super().form_valid(form)
+
+class ScoreDelete(LoginRequiredMixin, DeleteView):
+    model = Score
 
 class ScoreDetail(DetailView):
     model = Score
@@ -110,7 +114,7 @@ class ArrangerDetailLikedScores(DetailView):
     context_object_name = 'profile'
 
 
-class ArrangerDetailPurchasedScores(DetailView):
+class ArrangerDetailPurchasedScores(LoginRequiredMixin, DetailView):
     model = Profile
     template_name = 'sheetmusic/arranger_detail_purchased_scores.html'
     context_object_name = 'profile'
@@ -165,3 +169,25 @@ class Checkout(LoginRequiredMixin, UpdateView):
         profile.shopping_cart.clear()
         return reverse_lazy('sheetmusic:arranger_purchased_scores', kwargs={'pk': profile.pk})
 
+
+class SalesInsights(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = 'sheetmusic/sales_insights.html'
+    context_object_name = 'profile'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = self.object
+        scores = profile.score.all()
+
+        score_with_earnings = scores.annotate(
+            total_earnings=Sum(F('sold_copies__score__price')), n_sold_copies=Count('sold_copies'), #F permette di accedere a un campo del model
+        )
+
+        total_earnings = score_with_earnings.aggregate(
+            total=Sum('total_earnings')
+        )['total'] or 0
+
+        context['score_with_earnings'] = score_with_earnings
+        context['total_earnings'] = round(total_earnings, 2)
+        return context

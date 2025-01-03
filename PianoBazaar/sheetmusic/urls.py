@@ -17,6 +17,7 @@ urlpatterns = [
     path('arranger/<pk>/', ArrangerDetail.as_view(), name='arranger'),
     path('arranger/<pk>/liked-scores/', ArrangerDetailLikedScores.as_view(), name='arranger_liked_scores'),
     path('arranger/<pk>/purchased-scores/', ArrangerDetailPurchasedScores.as_view(), name='arranger_purchased_scores'),
+    path('profile/<pk>/sales-insights/', SalesInsights.as_view(), name='sales_insights'),
     path('score/<score_pk>/pre-checkout/', pre_checkout, name='pre_checkout'),
     path('user/<pk>/checkout/', Checkout.as_view(), name='checkout'),
 

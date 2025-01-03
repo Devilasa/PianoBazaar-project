@@ -244,7 +244,7 @@ class Score(models.Model):
         return Score.objects.filter(arranger=self).aggregate(likes_count=Count('liked_by'))['likes_count'] or 0
 
 class Copy(models.Model):
-    score = models.ForeignKey(Score, on_delete=models.CASCADE)
+    score = models.ForeignKey(Score, on_delete=models.CASCADE, related_name='sold_copies')
     purchase_date = models.DateField(auto_now=False, auto_now_add=True)
     buyer = models.ForeignKey(Profile, on_delete=models.CASCADE)
     license = models.CharField(max_length=50, null=True, blank=True)
