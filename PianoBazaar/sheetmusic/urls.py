@@ -8,6 +8,7 @@ app_name = 'sheetmusic'
 urlpatterns = [
     re_path(r'^$|^/$|^home/$', ScoreList.as_view(), name='home'),
     path('score-upload/', ScoreCreate.as_view(), name='score_upload'),
+    path('score-delete/<score_pk>', score_delete, name='score_delete'),
     path('add-liked-score/<score_pk>', like_score, name='add_liked_score'),
     path('add-score-to-shopping-cart/<score_pk>', manage_score_for_shopping_cart, name='add_score_to_shopping_cart'),
     path('detail/<pk>/', ScoreDetail.as_view(), name='detail'),

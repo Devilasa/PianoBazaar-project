@@ -71,7 +71,6 @@
         {% if user.is_authenticated %}
             <ul class="navbar-nav ms-auto me-4">
                 <li class="nav-item">
-{#                    <a id="login_link_button" class="nav-link btn btn-primary border border-primary-subtle" href="{% url 'login' %}">{{ user.username }}</a>#}
                     <div class="dropdown dropstart text-end">
                       <button type="button" class="nav-link btn btn-primary dropdown-toggle border border-primary-subtle" data-bs-toggle="dropdown">
                           {{ user.username }}

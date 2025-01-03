@@ -1,3 +1,5 @@
+import profile
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -5,6 +7,7 @@ from django.db.models import Count, Sum, F
 from django.db.models.functions import Round
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
+from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
@@ -30,6 +33,7 @@ def manage_score_for_shopping_cart(request, score_pk):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
     # si genera un errore quando l'utente cerca di metterlo nel carrello da non loggato perchè dopo aver fatto il login vieni reindirizzato
     # a questa pagina che però ti reinderizza alla pagina che chiama questa vista quindi ritorna nella pagina di login_required (la logica viene però eseguita correttamente)
+
 
 class ScoreList(ListView):
     model = Score
@@ -60,8 +64,20 @@ class ScoreCreate(LoginRequiredMixin, CreateView):
         form.instance.arranger = profile
         return super().form_valid(form)
 
-class ScoreDelete(LoginRequiredMixin, DeleteView):
-    model = Score
+
+@login_required
+def score_delete(request, score_pk):
+    if request.method == 'POST':
+        Score.objects.get(pk=score_pk).delete()
+        messages.success(request, 'Your score has been deleted.')
+        return redirect('sheetmusic:arranger', Profile.objects.get(user=request.user).pk)
+
+    previous_url = request.META.get('HTTP_REFERER', '/sheetmusic/')
+    request.session['delete_score_modal'] = 'show'
+    request.session['delete_score_name'] = Score.objects.get(pk=score_pk).title
+    request.session['delete_score_pk'] = score_pk
+    return redirect(previous_url)
+
 
 class ScoreDetail(DetailView):
     model = Score
@@ -105,6 +121,11 @@ class ArrangerDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['my_scores_list'] = Score.objects.filter(arranger=self.object)
+        try:
+            context['delete_score_modal'] = self.request.session.pop('delete_score_modal', None)
+            context['delete_score_name'] = self.request.session.pop('delete_score_name', None)
+            context['delete_score_pk'] = self.request.session.pop('delete_score_pk', None)
+        except: pass
         return context
 
 
