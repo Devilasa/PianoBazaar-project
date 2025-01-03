@@ -1,4 +1,10 @@
-<div class="container-fluid mt-3">
+{%  extends 'base.html' %}
+
+{% block title %} PianoBazaar - sheetmusic {% endblock %}
+
+
+{% block content %}
+    <div class="container-fluid mt-3">
 
     {% if user.is_authenticated %}
         
@@ -61,3 +67,5 @@
     {% endif %}
 
 </div><br>
+
+{% endblock %}

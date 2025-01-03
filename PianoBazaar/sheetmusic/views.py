@@ -3,7 +3,7 @@ import profile
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Count, Sum, F
+from django.db.models import Count, Sum, F, Q
 from django.db.models.functions import Round
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
@@ -39,12 +39,36 @@ class ScoreList(ListView):
     model = Score
     template_name = 'sheetmusic/home.html'
 
+    def get(self, request, *args, **kwargs):
+        if 'q' in self.request.GET:
+            s_string = self.request.GET['q'] or None
+            print(s_string)
+            if s_string is not None:
+                return redirect('sheetmusic:search_scores', s_string=s_string)
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['page'] = 'scores'
         if 'next' in self.request.GET:
             messages.warning(self.request, 'You need to login in order to like scores.')
         return context
+
+
+
+class SearchScoreList(ListView):
+    model = Score
+    template_name = 'sheetmusic/score_search_results.html'
+
+    def get_queryset(self):
+        s_string = self.request.resolver_match.kwargs['s_string']
+        # Restituisce un QuerySet contenente tutti gli oggetti che soddisfano almeno una delle condizioni specificate. I duplicati vengono scartati.
+        result_scores = Score.objects.filter(
+            Q(title__icontains=s_string) |
+            Q(arranger__user__username__icontains=s_string) |
+            Q(arranger__user__last_name__icontains=s_string)
+        )
+        return result_scores
 
 
 class ScoreCreate(LoginRequiredMixin, CreateView):
@@ -157,7 +181,6 @@ class ArrangerViewShoppingCart(LoginRequiredMixin, DetailView):
 
 
 
-
 class ProfileUpdate(UpdateView):
     model = Profile
     template_name = 'sheetmusic/profile_update.html'
@@ -175,7 +198,7 @@ class ProfileUpdate(UpdateView):
 
 
 @login_required
-def pre_checkout(request, score_pk):
+def pre_checkout(self, request, score_pk):
     score = Score.objects.get(pk=score_pk)
     profile = request.user.profile
     profile.add_score_to_shopping_cart(score)
