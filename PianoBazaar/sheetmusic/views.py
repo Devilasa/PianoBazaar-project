@@ -140,6 +140,24 @@ class ArrangerDetailPurchasedScores(LoginRequiredMixin, DetailView):
     template_name = 'sheetmusic/arranger_detail_purchased_scores.html'
     context_object_name = 'profile'
 
+class ArrangerViewShoppingCart(LoginRequiredMixin, DetailView):
+    model = Profile
+    template_name = 'sheetmusic/profile_shopping_cart.html'
+    context_object_name = 'profile'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile = self.object
+        total_price = 0
+        for score in profile.shopping_cart.all():
+            total_price += float(score.price)
+        total_price = round(total_price, 2)
+        context['total_price'] = total_price
+        return context
+
+
+
+
 class ProfileUpdate(UpdateView):
     model = Profile
     template_name = 'sheetmusic/profile_update.html'
@@ -153,6 +171,8 @@ class ProfileUpdate(UpdateView):
     def get_success_url(self):
         pk = self.kwargs['pk']
         return reverse_lazy('sheetmusic:arranger', kwargs={'pk': pk})
+
+
 
 @login_required
 def pre_checkout(request, score_pk):

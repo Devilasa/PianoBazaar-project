@@ -1,11 +1,8 @@
 {% extends 'base.html' %}
-{% load crispy_forms_filters %}
-{% load crispy_forms_tags %}
 
 {% block content %}
-        <div class="row">
-
-            <div class="col-6 ms-5 overflow-auto" style="max-height: 80vh;">
+    <div class="row">
+        <div class="col-6 ms-5 overflow-auto" style="max-height: 80vh;">
                 <table class="table table-bordered">
 
                     <thead class="table table-dark">
@@ -17,7 +14,7 @@
 
                     <tbody>
                         {% for score in user_profile.shopping_cart.all %}
-                        <tr> {#table-row#}
+                        <tr>
                             <td>
                                 <div class="d-flex justify-content-between">
 
@@ -46,28 +43,9 @@
                     </tbody>
 
                 </table>
-
-            </div>
-
-            <div class="col-md-3 offset-1">
-                <p class="h3">Billing Information</p>
-                <form method="post" id="checkout-form">
-                    {% csrf_token %}
-                    
-                    {{ form | crispy }} 
-                    
-                    <p class="h3 mt-5 mb-3">Total: {{ total_price }} €</p>
-                    
-                    <label for="payment-method" class="h4 form-label mt-3">Select payment method</label>
-                    <select class="form-select mt-2" id="payment-method">
-                      <option>Paypal</option>
-                      <option>Credit Card</option>
-                      <option>Bank Transfer</option>
-                    </select>
-                    
-                    <button type="submit" class="btn btn-primary mt-4">Buy Now</button>
-                </form>
-                <br>
-            </div>
         </div>
+        <div class="col-3 offset-1">
+            <p class="h3">Provisional total: {{ total_price }}€</p>
+        </div>
+    </div>
 {% endblock %}

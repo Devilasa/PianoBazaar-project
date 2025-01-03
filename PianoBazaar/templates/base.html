@@ -77,6 +77,7 @@
                       </button>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:arranger' pk=user_profile.id %}">My Profile</a></li>
+                          <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:view_shopping_cart' pk=user_profile.id %}">My Shopping Cart</a></li>
                         <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:sales_insights' pk=user_profile.id %}">Sales Insights</a></li>
                         <li><a class="dropdown-item nav-link" href="{% url 'logout' %}">Logout</a></li>
                       </ul>

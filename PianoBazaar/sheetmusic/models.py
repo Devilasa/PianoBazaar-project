@@ -1,21 +1,15 @@
 import os.path
-from email.policy import default
-from random import choice
+from urllib.parse import urlparse, parse_qs
 
 import PyPDF2
 import fitz
-
 from PyPDF2 import PdfReader
-from urllib.parse import urlparse, parse_qs
-
-from django.contrib.admin.utils import label_for_field
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.db.models import Count
 from django_countries.fields import CountryField
-from localflavor.it.forms import ITProvinceSelect
 
 from PianoBazaar.settings import BASE_DIR
 
@@ -24,7 +18,6 @@ def validate_pdf(file):
     try:
         PdfReader(file)
     except Exception:
-        # Oops! It seems the uploaded file is not a valid PDF. Make sure to upload a proper PDF file and try again.
         raise ValidationError('File must be in PDF format.')
 
 class Profile(models.Model):
@@ -86,7 +79,7 @@ class BillingProfile(models.Model):
     receiving_email = models.CharField(max_length=100, null=True)
 
     def __str__(self):
-        return f'billing information: country: {self.country}, region: {self.region}, city: {self.city}, postal code: {self.postal_code}, billing address: {self.billing_address}'
+        return f'billing information: country: {self.country}, region: {self.region}, city: {self.city}, billing address: {self.billing_address}'
 
 
 class Score(models.Model):
