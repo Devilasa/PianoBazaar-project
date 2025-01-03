@@ -16,12 +16,12 @@
                             <a href="{% url 'sheetmusic:detail' pk=score.pk %}" class="btn btn-primary">See score</a>
                         
                             {% if score in user_profile.liked_scores.all %}
-                                <a class="" href="{% url 'sheetmusic:add_liked_score' score_pk=score.pk %}">
-                                    <i class="fa-solid fa-heart me-3" style="font-size: 1.5rem; color: red"></i>
+                                <a class="like-btn" data-score-id="{{ score.pk }}" href="{% url 'sheetmusic:toggle_like' score_pk=score.pk %}">
+                                    <i class="fa-solid fa-heart me-3 like-icon" style="font-size: 1.5rem; color: red"></i>
                                 </a>
                             {% else %}
-                                <a class="" href="{% url 'sheetmusic:add_liked_score' score_pk=score.pk %}">
-                                    <i class="fa-regular fa-heart me-3" style="font-size: 1.5rem; color: grey"></i>
+                                <a class="like-btn" data-score-id="{{ score.pk }}"  href="{% url 'sheetmusic:toggle_like' score_pk=score.pk %}">
+                                    <i class="fa-regular fa-heart me-3 like-icon" style="font-size: 1.5rem; color: grey"></i>
                                 </a>
                             {% endif %}
                         
@@ -32,7 +32,44 @@
             {% endfor %}
         
         </div>
-        
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const likeButtons = document.querySelectorAll('.like-btn');
+            
+                likeButtons.forEach(button => {
+                    button.addEventListener('click', function (event) {
+                        event.preventDefault();
+                        
+                        const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                        const scoreId = this.getAttribute('data-score-id');
+                        const likeIcon = this.querySelector('.like-icon');
+                        
+                        const xhttp = new XMLHttpRequest();
+                        xhttp.open('POST', `/sheetmusic/toggle-like/${scoreId}/`, true);
+                        xhttp.setRequestHeader('X-CSRFToken', csrftoken);
+                        xhttp.onload = function () {
+                            if (xhttp.status === 200) {
+                                const response = JSON.parse(xhttp.responseText);
+                                if (response.liked) {
+                                    likeIcon.classList.remove('fa-regular');
+                                    likeIcon.classList.add('fa-solid');
+                                    likeIcon.style.color = 'red';
+                                    
+                                } else {
+                                    likeIcon.classList.remove('fa-solid');
+                                    likeIcon.classList.add('fa-regular');
+                                    likeIcon.style.color = 'grey';
+                                }
+                            } else {
+                                console.error('Errore durante la richiesta');
+                            }
+                        };
+                    xhttp.send();
+                    });
+                });
+            });            
+            setTimeout(() => heartIcon.classList.remove('animate-like'), 300); 
+        </script>
     {% else %}
         
         <div id="card-container" class="d-flex flex-wrap justify-content-center">
@@ -47,7 +84,7 @@
                         
                         <div class="d-flex justify-content-between align-items-center">
                             <a href="{% url 'sheetmusic:detail' pk=score.pk %}" class="btn btn-primary">See score</a>
-                            <a class="" href="{% url 'sheetmusic:add_liked_score' score_pk=score.pk %}">
+                            <a class="" href="{% url 'sheetmusic:toggle_like' score_pk=score.pk %}">
                                 <i class="fa-regular fa-heart me-3" style="font-size: 1.5rem; color: grey"></i>
                             </a>
                         </div>
@@ -59,5 +96,4 @@
         </div>
         
     {% endif %}
-
 </div><br>

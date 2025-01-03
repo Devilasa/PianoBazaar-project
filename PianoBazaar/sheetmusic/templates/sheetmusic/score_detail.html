@@ -35,12 +35,12 @@
                                 <a href="{% url 'sheetmusic:pre_checkout' score_pk=object.pk %}" class="btn btn-primary me-2"><p class="h5 mb-1 mt-1" style="height: 23px">Buy</p></a>
 
                                 {% if object in user_profile.shopping_cart.all %}
-                                     <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:add_score_to_shopping_cart' score_pk=object.pk %}">
+                                     <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:toggle_score_in_shopping_cart' score_pk=object.pk %}">
                                         <p class="h5 d-inline">Remove from Cart </p>
                                         <i class="fa-solid fa-cart-shopping d-inline" style="font-size: 1.8rem; color: white"></i>
                                      </a>
                                     {% else %}
-                                    <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:add_score_to_shopping_cart' score_pk=object.pk %}">
+                                    <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:toggle_score_in_shopping_cart' score_pk=object.pk %}">
                                         <p class="h5 d-inline">Add to cart </p>
                                         <i class="fa-solid fa-cart-shopping d-inline" style="font-size: 1.8rem; color: white"></i>
                                      </a>
@@ -51,7 +51,7 @@
                         {% else %}
                             <a href="{% url 'login' %}?next=/sheetmusic/detail/{{ object.pk }}" class="btn btn-primary me-2"><p class="h5 mb-1 mt-1" style="height: 23px">Buy</p></a>
 
-                            <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:add_score_to_shopping_cart' score_pk=object.pk %}">
+                            <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:toggle_score_in_shopping_cart' score_pk=object.pk %}">
                                 <p class="h5 d-inline">Add to cart </p>
                                 <i class="fa-solid fa-cart-shopping d-inline" style="font-size: 1.8rem; color: white"></i>
                             </a>

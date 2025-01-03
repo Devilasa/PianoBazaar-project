@@ -5,10 +5,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count, Sum, F, Q, Value
 from django.db.models.functions import Round, Concat
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.template.context_processors import request
 from django.urls import reverse_lazy
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 
 from PianoBazaar.forms import ProfileCreationForm
@@ -17,22 +18,41 @@ from sheetmusic.forms import ScoreCreateForm, CheckoutForm, ProfileUpdateForm
 from sheetmusic.models import Score, Profile, BillingProfile, Copy
 
 
+# @login_required
+# def like_score(request, score_pk):
+#     score = Score.objects.get(pk=score_pk)
+#     profile = request.user.profile
+#     profile.toggle_like(score)
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
+
+@csrf_exempt
 @login_required
-def like_score(request, score_pk):
-    score = Score.objects.get(pk=score_pk)
-    profile = request.user.profile
-    profile.toggle_like(score)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
+def toggle_like(request, score_pk):
+    if request.method == 'POST':
+        score = Score.objects.get(pk=score_pk)
+        print(score)
+        user_profile = request.user.profile
+        print(user_profile)
+
+        if score in user_profile.liked_scores.all():
+            user_profile.liked_scores.remove(score)
+            liked = False
+        else:
+            user_profile.liked_scores.add(score)
+            liked = True
+
+        return JsonResponse({'liked': liked})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
 @login_required
-def manage_score_for_shopping_cart(request, score_pk):
+def toggle_score_in_shopping_cart(request, score_pk):
     score = Score.objects.get(pk=score_pk)
     profile = request.user.profile
     profile.toggle_score_in_shopping_cart(score)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
     # si genera un errore quando l'utente cerca di metterlo nel carrello da non loggato perchè dopo aver fatto il login vieni reindirizzato
-    # a questa pagina che però ti reinderizza alla pagina che chiama questa vista quindi ritorna nella pagina di login_required (la logica viene però eseguita correttamente)
+    # a questa pagina che però ti reindirizza alla pagina che chiama questa vista quindi ritorna nella pagina di login_required (la logica viene però eseguita correttamente)
 
 
 class ScoreList(ListView):
@@ -156,7 +176,9 @@ class SearchProfile(ListView):
             Q(user__first_name__icontains=s_string) |
             Q(user__last_name__icontains=s_string) |
             Q(full_name__icontains=s_string)
-        )
+        ).annotate(
+            score_count=Count('score', distinct=True),
+            likes_count=Count('score__liked_by'),)
         return result_scores
 
 
@@ -222,7 +244,7 @@ class ProfileUpdate(UpdateView):
 
 
 @login_required
-def pre_checkout(self, request, score_pk):
+def pre_checkout(request, score_pk):
     score = Score.objects.get(pk=score_pk)
     profile = request.user.profile
     profile.add_score_to_shopping_cart(score)

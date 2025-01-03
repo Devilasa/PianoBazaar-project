@@ -36,15 +36,6 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.first_name} {self.user.last_name}'
 
-    def toggle_like(self, score):
-        if self.liked_scores.filter(pk=score.pk).exists():
-            self.liked_scores.remove(score)
-            like = False
-        else:
-            self.liked_scores.add(score)
-            like = True
-        return like
-
     def toggle_score_in_shopping_cart(self, score):
         if self.shopping_cart.filter(pk=score.pk).exists():
             self.shopping_cart.remove(score)
