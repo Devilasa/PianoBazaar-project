@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_filters %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-center mt-2">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="text-center mt-1 mb-2">Profile Update</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+
+                    {{ form | crispy }}
+
+                    <input type="submit" class="btn btn-primary mt-2" value="Update">
+
+                </form>
+            </div>
+        </div>
+    </div>
+    <br><br><br><br>
+
+{% endblock %}

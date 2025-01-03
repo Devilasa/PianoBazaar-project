@@ -7,7 +7,9 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 
-from sheetmusic.forms import ScoreCreateForm, CheckoutForm
+from PianoBazaar.forms import ProfileCreationForm
+from sheetmusic.context_processor import user_profile_context
+from sheetmusic.forms import ScoreCreateForm, CheckoutForm, ProfileUpdateForm
 from sheetmusic.models import Score, Profile, BillingProfile
 
 
@@ -27,7 +29,6 @@ def manage_score_for_shopping_cart(request, score_pk):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
     # si genera un errore quando l'utente cerca di metterlo nel carrello da non loggato perchè dopo aver fatto il login vieni reindirizzato
     # a questa pagina che però ti reinderizza alla pagina che chiama questa vista quindi ritorna nella pagina di login_required (la logica viene però eseguita correttamente)
-
 
 class ScoreList(ListView):
     model = Score
@@ -52,6 +53,12 @@ class ScoreCreate(LoginRequiredMixin, CreateView):
         context['page'] = 'upload score'
         return context
 
+    def form_valid(self, form):
+        user = self.request.user
+        profile = Profile.objects.get(user=user)
+        form.instance.arranger = profile
+        return super().form_valid(form)
+
 class ScoreDetail(DetailView):
     model = Score
     template_name = 'sheetmusic/score_detail.html'
@@ -60,12 +67,26 @@ class ScoreDetail(DetailView):
         context = super().get_context_data(**kwargs)
         return context
 
+class ScoreVisualize(LoginRequiredMixin, DetailView):
+    model = Score
+    template_name = 'sheetmusic/score_visualize.html'
+    context_object_name = 'score'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        score = Score.objects.get(pk=self.kwargs['pk'])
+        context['pages'] = range(score.pages)
+        return context
+
 class ArrangerList(ListView):
     model = Profile
     template_name = 'sheetmusic/arranger_list.html'
 
     def get_queryset(self):
-        return Profile.objects.annotate(score_count=Count('score'))
+        return Profile.objects.annotate(
+            score_count=Count('score', distinct=True),
+            likes_count=Count('score__liked_by'),
+        )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -94,15 +115,30 @@ class ArrangerDetailPurchasedScores(DetailView):
     template_name = 'sheetmusic/arranger_detail_purchased_scores.html'
     context_object_name = 'profile'
 
+class ProfileUpdate(UpdateView):
+    model = Profile
+    template_name = 'sheetmusic/profile_update.html'
+    form_class = ProfileUpdateForm
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_success_url(self):
+        pk = self.kwargs['pk']
+        return reverse_lazy('sheetmusic:arranger', kwargs={'pk': pk})
+
 @login_required
 def pre_checkout(request, score_pk):
     score = Score.objects.get(pk=score_pk)
     profile = request.user.profile
     profile.add_score_to_shopping_cart(score)
-    return redirect('sheetmusic:checkout', profile.pk)
+    b_profile = BillingProfile.objects.get(user=request.user)
+    return redirect('sheetmusic:checkout', b_profile.pk)
 
 class Checkout(LoginRequiredMixin, UpdateView):
-    model = Profile
+    model = BillingProfile
     form_class = CheckoutForm
     template_name = 'sheetmusic/checkout.html'
     context_object_name = 'profile'
@@ -116,3 +152,16 @@ class Checkout(LoginRequiredMixin, UpdateView):
         total_price = round(total_price, 2)
         context['total_price'] = total_price
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_success_url(self):
+        profile = Profile.objects.get(user=self.request.user)
+        for score in profile.shopping_cart.all():
+            profile.add_purchased_score(score)
+        profile.shopping_cart.clear()
+        return reverse_lazy('sheetmusic:arranger_purchased_scores', kwargs={'pk': profile.pk})
+

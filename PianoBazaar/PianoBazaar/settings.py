@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'sheetmusic',
     'crispy_forms',
     'crispy_bootstrap5',
+    'localflavor',
+    'django_countries',
 ]
 
 MIDDLEWARE = [

@@ -25,7 +25,8 @@
                                 <p style="font-size: 1.1rem" class="card-text ms-0">Has published a total of {{ arranger.score_count }} scores.</p>
                             </li>
                             <li class="list-group-item ps-1 mb-1">
-                                <p style="font-size: 1.1rem" class="card-text">Like received: </p>
+                                <p style="font-size: 1.1rem" class="card-text d-inline">Likes received: <h4 class="d-inline ms-2"> {{ arranger.likes_count }}</h4>
+                                <i class="fa-solid fa-heart me-4" style="font-size: 1.48rem; color: red"></i>
                             </li>
                         </ul>
                         <a href="{% url 'sheetmusic:arranger' pk=arranger.pk %}" class="btn btn-primary stretched-link">See profile</a>

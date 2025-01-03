@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block extra-js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div id="pdfCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="d-flex justify-content-center" id="page-number"></div>
+      <div class="carousel-inner" id="carousel-inner" style="position: relative; left: 33%;"></div>
+      <button class="carousel-control-prev bg-dark-subtle" type="button" data-bs-target="#pdfCarousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next bg-dark-subtle" type="button" data-bs-target="#pdfCarousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+    <br><br><br>
+<script>
+  const pdfUrl = '{{score.file.url}}'; // Percorso al file PDF
+  const carouselInner = document.getElementById('carousel-inner');
+  const pdfCarousel = document.getElementById('pdfCarousel');
+  const carousel = new bootstrap.Carousel(pdfCarousel, {
+      interval: false, // Disabilita il cambio automatico
+      ride: false, // Impedisce l'autoplay iniziale
+  });
+  const pageNumberDisplay = document.getElementById('page-number');
+  let currentPage = 1;
+  let totalPages = 0;
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+  const renderPDF = async (url) => {
+    const pdfDoc = await pdfjsLib.getDocument(url).promise;
+    totalPages = pdfDoc.numPages;   
+    
+    updatePageNumberDisplay(currentPage, totalPages);
+    
+    for (let pageNumber = 1; pageNumber <= pdfDoc.numPages; pageNumber++) {
+      const page = await pdfDoc.getPage(pageNumber);
+
+      // Creare un canvas per il rendering della pagina
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+      const viewport = page.getViewport({ scale: 1.42 });
+
+      canvas.width = viewport.width;
+      canvas.height = viewport.height;
+
+      await page.render({
+        canvasContext: context,
+        viewport: viewport,
+      }).promise;
+
+      // Creare un elemento carousel-item
+      const carouselItem = document.createElement('div');
+      carouselItem.classList.add('carousel-item');
+      if (pageNumber === 1) carouselItem.classList.add('active'); // Imposta la prima pagina come attiva
+        
+      // Inserire il canvas nel carousel-item
+      carouselItem.appendChild(canvas);
+
+      // Aggiungere l'elemento al carousel
+      carouselInner.appendChild(carouselItem);
+    }
+  };
+  
+  const updatePageNumberDisplay = (currentPage, totalPages) => {
+      pageNumberDisplay.innerHTML = `Page ${currentPage} of ${totalPages}`;
+  };
+  
+  pdfCarousel.addEventListener('slide.bs.carousel', function (event) {
+      currentPage = event.to + 1; // `event.to` è l'indice della pagina (0-based)
+      updatePageNumberDisplay(currentPage, totalPages);
+  });
+  
+  renderPDF(pdfUrl);
+</script>
+{% endblock %}

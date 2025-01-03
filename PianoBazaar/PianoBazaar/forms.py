@@ -32,7 +32,7 @@ class ProfileCreationForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        exclude = ['user', 'liked_scores', 'purchased_scores']
+        exclude = ['user', 'liked_scores', 'purchased_scores', 'shopping_cart']
 
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 3}),

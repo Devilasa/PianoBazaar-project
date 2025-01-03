@@ -63,7 +63,9 @@ class ProfileCreateView(SuccessMessageMixin, CreateView):
         user = User.objects.get(id=user_id)
         form.instance.user = user
         self.created_user = user
-        BillingProfile.objects.get_or_create(user=user)
+        billing_profile = BillingProfile.objects.get_or_create(user=user)
+        billing_profile.score_receiving_email = user.email
+        billing_profile.save()
         return super().form_valid(form)
 
     def get_success_message(self, cleaned_data):
