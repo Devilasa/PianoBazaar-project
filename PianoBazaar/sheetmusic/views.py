@@ -1,8 +1,9 @@
 import profile
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 from django.db.models import Count, Sum, F, Q, Value
 from django.db.models.functions import Round, Concat
 from django.http import HttpResponseRedirect, JsonResponse
@@ -109,8 +110,9 @@ class ScoreCreate(LoginRequiredMixin, CreateView):
 def score_delete(request, score_pk):
     if request.method == 'POST':
         Score.objects.get(pk=score_pk).delete()
-        messages.success(request, 'Your score has been deleted.')
-        return redirect('sheetmusic:arranger', Profile.objects.get(user=request.user).pk)
+        messages.success(request, 'The score has been deleted.')
+        previous_url = request.META.get('HTTP_REFERER', '/sheetmusic/')
+        return redirect(previous_url)
 
     previous_url = request.META.get('HTTP_REFERER', '/sheetmusic/')
     request.session['delete_score_modal'] = 'show'
@@ -223,7 +225,25 @@ class ArrangerViewShoppingCart(LoginRequiredMixin, DetailView):
         context['total_price'] = total_price
         return context
 
+def profile_delete(request, profile_pk):
+    if request.method == 'POST':
+        profile = Profile.objects.get(pk=profile_pk)
+        user = User.objects.get(pk=profile.user_id)
+        b_profile = BillingProfile.objects.get(user=user)
 
+        b_profile.delete()
+        profile.delete()
+        user.delete()
+
+        messages.success(request, 'The account has been deleted.')
+        previous_url = request.META.get('HTTP_REFERER', '/sheetmusic/')
+        return redirect(previous_url)
+
+    previous_url = request.META.get('HTTP_REFERER', '/sheetmusic/')
+    request.session['delete_profile_modal'] = 'show'
+    request.session['delete_profile_name'] = Profile.objects.get(pk=profile_pk).user.username
+    request.session['delete_profile_pk'] = profile_pk
+    return redirect(previous_url)
 
 class ProfileUpdate(UpdateView):
     model = Profile

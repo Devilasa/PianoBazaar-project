@@ -236,3 +236,6 @@ class Copy(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.buyer.purchased_scores.add(self.score)
+
+    class Meta:
+        verbose_name_plural = "Copies"

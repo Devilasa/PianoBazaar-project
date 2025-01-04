@@ -5,7 +5,7 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Field, Submit
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 
 from sheetmusic.models import Profile
 
@@ -69,3 +69,25 @@ class ProfileCreationForm(forms.ModelForm):
             user.save()
             profile.save()
         return profile
+
+class StaffUserCreationForm(UserCreationForm):
+    class Meta:
+        model = User
+        fields = ["username", "password1", "password2", "email",]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].help_text = "Staff member email."
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email') # ottieni il valore corrente del campo email dopo che ha superato i test di validazione fatti fino a questo momento
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError('An account with this email already exists.')
+        return email
+
+    def save(self, commit=True):
+        user = super().save(commit)
+        user.is_staff = True
+        # g = Group.objects.get(name="Staff Member")
+        # g.user_set.add(user)
+        return user

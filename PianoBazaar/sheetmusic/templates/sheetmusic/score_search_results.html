@@ -12,6 +12,11 @@
         
             {% for score in object_list %}
                 <div class="card m-2 custom-card-shadow" style="width:400px">
+                
+                {% if user.is_staff or user.is_superuser %}
+                    <a class="btn btn-danger custom-card-shadow" id="remove-score-button" href="{% url 'sheetmusic:score_delete' score.pk %}">✕</a>
+                {% endif %}
+                
                 <img class="card-img-top" src="{{ score.cover.url }}" alt="{{ score.cover }}" style="width:100%">
                     <div class="card-body">
                         
@@ -68,4 +73,40 @@
 
 </div><br>
 
+{% endblock %}
+
+{% block modal %}
+{{ block.super }}
+    {% if delete_score_modal %}
+        {% if user.is_staff or user.is_superuser %}
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="staticBackdropLabel">Delete Score</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <h5> {{ user.username }}, are you sure you want to delete {{ delete_score_name }} score? </h5>
+                      </div>
+                      <div class="modal-footer">
+    
+                          <form action="{% url 'sheetmusic:score_delete' score_pk=delete_score_pk  %}" method="post">
+                              {% csrf_token %}
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-danger">Confirm</button>
+                          </form>
+    
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('staticBackdrop'));
+                    myModal.show();
+                  });
+            </script>
+        {% endif %}
+    {% endif %}
 {% endblock %}

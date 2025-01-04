@@ -15,8 +15,12 @@
     <div class="container-fluid mt-3">
         <div id="card-container" class="d-flex flex-wrap justify-content-center">
             {% for arranger in object_list %}
-                <div class="card m-2" style="max-width: 20rem;">
-
+                <div class="card m-2 custom-card-shadow" style="max-width: 20rem;">
+                        
+                    {% if user.is_staff or user.is_superuser %}
+                        <a class="btn btn-danger custom-card-shadow" id="remove-profile-button" href="{% url 'sheetmusic:profile_delete' arranger.pk %}">✕</a>
+                    {% endif %}
+                
                     <div class="card-header">
                         <h4 class="card-title">@{{ arranger.user.username }}</h4>
                         <h5 class="card-title"> aka {{ arranger.user.first_name }} {{ arranger.user.last_name}}</h5>
@@ -44,4 +48,40 @@
             {% endfor %}
         </div>
     </div><br>
+{% endblock %}
+
+{% block modal %}
+{{ block.super }}
+    {% if delete_profile_modal %}
+        {% if user.is_staff or user.is_superuser %}
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                  <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h1 class="modal-title fs-3" id="staticBackdropLabel">Delete Profile</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <h5> {{ user.username }}, are you sure you want to delete {{ delete_profile_name }} profile? </h5>
+                      </div>
+                      <div class="modal-footer">
+    
+                          <form action="{% url 'sheetmusic:profile_delete' profile_pk=delete_profile_pk  %}" method="post">
+                              {% csrf_token %}
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-danger">Confirm</button>
+                          </form>
+    
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    const myModal = bootstrap.Modal.getOrCreateInstance(document.getElementById('staticBackdrop'));
+                    myModal.show();
+                  });
+            </script>
+        {% endif %}
+    {% endif %}
 {% endblock %}

@@ -8,7 +8,7 @@
 
     <div id="pdfCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="d-flex justify-content-center" id="page-number"></div>
-      <div class="carousel-inner" id="carousel-inner" style="position: relative; left: 33%;"></div>
+      <div class="carousel-inner" id="carousel-inner" style="position: relative; left: 34%;"></div>
       <button class="carousel-control-prev bg-dark-subtle" type="button" data-bs-target="#pdfCarousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
@@ -19,6 +19,7 @@
       </button>
     </div>
     <br><br><br>
+    
 <script>
   const pdfUrl = '{{score.file.url}}'; // Percorso al file PDF
   const carouselInner = document.getElementById('carousel-inner');
@@ -79,4 +80,5 @@
   
   renderPDF(pdfUrl);
 </script>
+    
 {% endblock %}

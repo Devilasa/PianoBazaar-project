@@ -6,6 +6,9 @@
         
             {% for score in object_list %}
                 <div class="card m-2 custom-card-shadow" style="width:400px">
+                {% if user.is_staff or user.is_superuser %}
+                    <a class="btn btn-danger custom-card-shadow" id="remove-score-button" href="{% url 'sheetmusic:score_delete' score.pk %}">✕</a>
+                {% endif %}
                 <img class="card-img-top" src="{{ score.cover.url }}" alt="{{ score.cover }}" style="width:100%">
                     <div class="card-body">
                         
@@ -115,4 +118,5 @@
         </div>
 
     {% endif %}
+
 </div><br>

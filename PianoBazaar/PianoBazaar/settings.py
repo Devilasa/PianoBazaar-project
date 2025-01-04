@@ -140,4 +140,3 @@ CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 LOGIN_REDIRECT_URL = '/sheetmusic/'
 LOGIN_URL = 'login'
-

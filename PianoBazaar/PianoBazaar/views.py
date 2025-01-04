@@ -1,5 +1,6 @@
 from urllib.parse import urlparse
 
+from braces.views import SuperuserRequiredMixin
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -10,7 +11,7 @@ from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
-from PianoBazaar.forms import ProfileCreationForm, UserCreateForm
+from PianoBazaar.forms import ProfileCreationForm, UserCreateForm, StaffUserCreationForm
 from sheetmusic.models import Score, BillingProfile, Profile
 
 
@@ -88,4 +89,13 @@ class ProfileCreateView(SuccessMessageMixin, UpdateView):
         return f"{self.created_user.username}'s profile was successfully created."
 
 
+class StaffUserCreateView(SuperuserRequiredMixin, CreateView):
+    form_class = StaffUserCreationForm
+    template_name = 'registration/staff_user_create.html'
 
+    def form_valid(self, form):
+        user = form.save()
+        Profile.objects.create(user=user)
+        profile = Profile.objects.get(user=user)
+        self.success_url = reverse_lazy("profile", kwargs={"pk": profile.pk})
+        return super().form_valid(form)

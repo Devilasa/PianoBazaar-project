@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-center mt-2">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h2 class="text-center mt-1">Staff Registration page</h2>
+                <h5 class="text-center">Use this form to register staff members only.</h5>
+            </div>
+            <div class="card-body">
+                <form method="post"> {% csrf_token %}
+
+                    {{ form|crispy }}
+
+                    <input type="submit" class="btn btn-danger mt-2" value="Register now">
+
+                </form>
+            </div>
+            <div class="card-footer text-muted text-center">
+                <br>
+                <h5>Already have an account? <a href="{% url 'login' %}">Login here</a></h5>
+                <br>
+            </div>
+        </div>
+    </div><br><br><br><br>
+
+{% endblock %}
