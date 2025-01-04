@@ -318,6 +318,11 @@ class SalesInsights(LoginRequiredMixin, DetailView):
             total=Sum('total_earnings')
         )['total'] or 0
 
+        total_copies = score_with_earnings.aggregate(
+            total=Sum('n_sold_copies')
+        )['total'] or 0
+
         context['score_with_earnings'] = score_with_earnings
         context['total_earnings'] = round(total_earnings, 2)
+        context['total_copies_sold'] = total_copies
         return context
