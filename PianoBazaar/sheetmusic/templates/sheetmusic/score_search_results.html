@@ -53,7 +53,7 @@
                         
                         <div class="d-flex justify-content-between align-items-center">
                             <a href="{% url 'sheetmusic:detail' pk=score.pk %}" class="btn btn-primary">See score</a>
-                            <a class="" href="{% url 'sheetmusic:toggle_like' score_pk=score.pk %}">
+                            <a class="" href="{% url 'login' %}?next=/sheetmusic/like scores/">
                                 <i class="fa-regular fa-heart me-3" style="font-size: 1.5rem; color: grey"></i>
                             </a>
                         </div>

@@ -37,18 +37,18 @@
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const likeButtons = document.querySelectorAll('.like-btn');
-            
+
                 likeButtons.forEach(button => {
                     button.addEventListener('click', function (event) {
                         event.preventDefault();
-                        
+
                         const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
                         const scoreId = this.getAttribute('data-score-id');
                         const likeIcon = this.querySelector('.like-icon');
                         const particleContainer = this.querySelector('.particle-container');
-                        
+
                         createParticles(particleContainer);
-                        
+
                         const xhttp = new XMLHttpRequest();
                         xhttp.open('POST', `/sheetmusic/toggle-like/${scoreId}/`, true);
                         xhttp.setRequestHeader('X-CSRFToken', csrftoken);
@@ -59,7 +59,7 @@
                                     likeIcon.classList.remove('fa-regular');
                                     likeIcon.classList.add('fa-solid');
                                     likeIcon.style.color = 'red';
-                                    
+
                                 } else {
                                     likeIcon.classList.remove('fa-solid');
                                     likeIcon.classList.add('fa-regular');
@@ -76,13 +76,13 @@
                     for (let i = 0; i < 10; i++) {
                         const particle = document.createElement('div');
                         particle.classList.add('particle');
-                        
+
                         // Genera una posizione casuale per l'esplosione
                         particle.style.setProperty('--x', (Math.random() - 0.5) * 2);  // Valori tra -1 e 1
                         particle.style.setProperty('--y', (Math.random() - 0.5) * 2);
-                        
+
                         container.appendChild(particle);
-                        
+
                         // Rimuove le particelle dopo l'animazione
                         particle.addEventListener('animationend', () => particle.remove());
                     }
@@ -103,7 +103,7 @@
                         
                         <div class="d-flex justify-content-between align-items-center">
                             <a href="{% url 'sheetmusic:detail' pk=score.pk %}" class="btn btn-primary">See score</a>
-                            <a class="" href="{% url 'sheetmusic:toggle_like' score_pk=score.pk %}">
+                            <a class="" href="{% url 'login' %}?next=/sheetmusic/like scores/">
                                 <i class="fa-regular fa-heart me-3" style="font-size: 1.5rem; color: grey"></i>
                             </a>
                         </div>
@@ -113,6 +113,6 @@
             {% endfor %}
         
         </div>
-        
+
     {% endif %}
 </div><br>

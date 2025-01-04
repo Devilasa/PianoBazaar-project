@@ -31,10 +31,10 @@
             
                 <div class="d-flex align-items-center mb-4 mt-4">
                         {% if user.is_authenticated %}
-                            {% if object not in user_profile.purchased_scores.all %}
+                            {% if object not in user_profile.purchased_scores.all and object.arranger.pk != user_profile.pk %}
                                 <a href="{% url 'sheetmusic:pre_checkout' score_pk=object.pk %}" class="btn btn-primary me-2"><p class="h5 mb-1 mt-1" style="height: 23px">Buy</p></a>
 
-                                {% if object in user_profile.shopping_cart.all %}
+                                {% if object in user_profile.shopping_cart.all%}
                                      <a class="btn btn-success text-white ms-4 cart-btn" data-score-id="{{ object.pk }}" href="{% url 'sheetmusic:toggle_score_in_shopping_cart' score_pk=object.pk %}">
                                         <p class="h5 d-inline cart-text">Remove from Cart </p>
                                         <i class="fa-solid fa-cart-shopping d-inline" style="font-size: 1.8rem; color: white"></i>
@@ -81,9 +81,9 @@
                                 <a href="{% url 'sheetmusic:visualize_score' pk=object.pk %}" class="btn btn-primary"><p class="h5 mb-1 mt-1" style="height: 23px">Visualize sheetmusic</p></a>
                             {% endif %}
                         {% else %}
-                            <a href="{% url 'login' %}?next=/sheetmusic/detail/{{ object.pk }}" class="btn btn-primary me-2"><p class="h5 mb-1 mt-1" style="height: 23px">Buy</p></a>
+                            <a href="{% url 'login' %}?next=/sheetmusic/buy scores/" class="btn btn-primary me-2"><p class="h5 mb-1 mt-1" style="height: 23px">Buy</p></a>
 
-                            <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:toggle_score_in_shopping_cart' score_pk=object.pk %}">
+                            <a class="btn btn-success text-white ms-4" href="{% url 'login' %}?next=/sheetmusic/add scores to the shopping cart/">
                                 <p class="h5 d-inline">Add to cart </p>
                                 <i class="fa-solid fa-cart-shopping d-inline" style="font-size: 1.8rem; color: white"></i>
                             </a>

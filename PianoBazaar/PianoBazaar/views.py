@@ -1,3 +1,5 @@
+from urllib.parse import urlparse
+
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
@@ -28,8 +30,23 @@ def logout_view(request):
 class LoginViewCustom(LoginView):
     def get(self, request, *args, **kwargs):
         if 'next' in request.GET:
-            next_url = request.GET['next'].split('/')[-1]
-            messages.warning(request, f'You need to login in order to access {next_url} page', extra_tags='alert-danger')
+
+            referer = request.META.get('HTTP_REFERER', '/')
+            referer = urlparse(referer).path
+
+            redirect_url = f'?next={referer}'
+            full_redirect_url = f'/login/?next={referer}'
+
+            if full_redirect_url != request.get_full_path():
+
+                # Messaggio di warning
+                next_url = request.GET.copy().get('next')
+                next_page = next_url.split('/')[2] if '/' in next_url else next_url
+                messages.warning(request, f'You need to login in order to {next_page}',
+                                 extra_tags='alert-danger')
+
+                return redirect(redirect_url)
+
         return super().get(request, *args, **kwargs)
 
 

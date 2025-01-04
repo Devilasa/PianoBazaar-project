@@ -43,8 +43,7 @@ def toggle_score_in_shopping_cart(request, score_pk):
         carted = profile.toggle_score_in_shopping_cart(score)
         return JsonResponse({'carted': carted})
     return JsonResponse({'error': 'Invalid request'}, status=400)
-    # si genera un errore quando l'utente cerca di metterlo nel carrello da non loggato perchè dopo aver fatto il login vieni reindirizzato
-    # a questa pagina che però ti reindirizza alla pagina che chiama questa vista quindi ritorna nella pagina di login_required (la logica viene però eseguita correttamente)
+
 
 @login_required
 def remove_score_from_shopping_cart(request, score_pk):
