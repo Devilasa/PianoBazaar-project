@@ -24,7 +24,7 @@
 
                                     <div class="col-7">
                                         <p class="mt-4"><a class="h3 link-primary" style="text-decoration: none;" href="{% url 'sheetmusic:detail' score.pk %}"> {{ score.title }}</a>
-                                            <a class="btn btn-close ms-5 mb-2 pt-0" href="{% url 'sheetmusic:add_score_to_shopping_cart' score.pk %}"></a>
+                                            <a class="btn btn-close ms-5 mb-2 pt-0" href="{% url 'sheetmusic:remove_score_from_shopping_cart' score.pk %}"></a>
                                         </p>
                                         <p class="h4 d-inline">by </p>
                                         <a id="arranger-profile-link" class="h4 d-inline link-primary" style="text-decoration: none;" href="{% url 'sheetmusic:arranger' score.arranger.pk %}"> {{ score.arranger }}</a>

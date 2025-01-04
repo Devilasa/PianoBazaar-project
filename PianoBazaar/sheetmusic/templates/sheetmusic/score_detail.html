@@ -35,16 +35,48 @@
                                 <a href="{% url 'sheetmusic:pre_checkout' score_pk=object.pk %}" class="btn btn-primary me-2"><p class="h5 mb-1 mt-1" style="height: 23px">Buy</p></a>
 
                                 {% if object in user_profile.shopping_cart.all %}
-                                     <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:toggle_score_in_shopping_cart' score_pk=object.pk %}">
-                                        <p class="h5 d-inline">Remove from Cart </p>
+                                     <a class="btn btn-success text-white ms-4 cart-btn" data-score-id="{{ object.pk }}" href="{% url 'sheetmusic:toggle_score_in_shopping_cart' score_pk=object.pk %}">
+                                        <p class="h5 d-inline cart-text">Remove from Cart </p>
                                         <i class="fa-solid fa-cart-shopping d-inline" style="font-size: 1.8rem; color: white"></i>
                                      </a>
                                     {% else %}
-                                    <a class="btn btn-success text-white ms-4" href="{% url 'sheetmusic:toggle_score_in_shopping_cart' score_pk=object.pk %}">
-                                        <p class="h5 d-inline">Add to cart </p>
+                                    <a class="btn btn-success text-white ms-4 cart-btn" data-score-id="{{ object.pk }}" href="{% url 'sheetmusic:toggle_score_in_shopping_cart' score_pk=object.pk %}">
+                                        <p class="h5 d-inline cart-text">Add to cart </p>
                                         <i class="fa-solid fa-cart-shopping d-inline" style="font-size: 1.8rem; color: white"></i>
                                      </a>
                                 {% endif %}
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function () {
+                                        const cartButtons = document.querySelectorAll('.cart-btn');
+                                    
+                                        cartButtons.forEach(button => {
+                                            button.addEventListener('click', function (event) {
+                                                event.preventDefault();
+                                                
+                                                const csrftoken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+                                                const scoreId = this.getAttribute('data-score-id');
+                                                const cartText = this.querySelector('.cart-text');
+                                                
+                                                const xhttp = new XMLHttpRequest();
+                                                xhttp.open('POST', `/sheetmusic/toggle-score-in-shopping-cart/${scoreId}/`, true);
+                                                xhttp.setRequestHeader('X-CSRFToken', csrftoken);
+                                                xhttp.onload = function () {
+                                                    if (xhttp.status === 200) {
+                                                        const response = JSON.parse(xhttp.responseText);
+                                                        if (response.carted) {
+                                                            cartText.innerHTML = 'Remove from Cart'
+                                                        } else {
+                                                            cartText.innerHTML = 'Add to Cart'
+                                                        }
+                                                    } else {
+                                                        console.error('Errore durante la richiesta');
+                                                    }
+                                                };
+                                            xhttp.send();
+                                            });
+                                        });
+                                    });
+                                </script>
                             {% else %}
                                 <a href="{% url 'sheetmusic:visualize_score' pk=object.pk %}" class="btn btn-primary"><p class="h5 mb-1 mt-1" style="height: 23px">Visualize sheetmusic</p></a>
                             {% endif %}

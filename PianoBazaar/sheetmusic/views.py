@@ -17,22 +17,12 @@ from sheetmusic.context_processor import user_profile_context
 from sheetmusic.forms import ScoreCreateForm, CheckoutForm, ProfileUpdateForm
 from sheetmusic.models import Score, Profile, BillingProfile, Copy
 
-
-# @login_required
-# def like_score(request, score_pk):
-#     score = Score.objects.get(pk=score_pk)
-#     profile = request.user.profile
-#     profile.toggle_like(score)
-#     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
-
 @csrf_exempt
 @login_required
 def toggle_like(request, score_pk):
     if request.method == 'POST':
         score = Score.objects.get(pk=score_pk)
-        print(score)
         user_profile = request.user.profile
-        print(user_profile)
 
         if score in user_profile.liked_scores.all():
             user_profile.liked_scores.remove(score)
@@ -47,12 +37,21 @@ def toggle_like(request, score_pk):
 
 @login_required
 def toggle_score_in_shopping_cart(request, score_pk):
-    score = Score.objects.get(pk=score_pk)
-    profile = request.user.profile
-    profile.toggle_score_in_shopping_cart(score)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
+    if request.method == 'POST':
+        score = Score.objects.get(pk=score_pk)
+        profile = request.user.profile
+        carted = profile.toggle_score_in_shopping_cart(score)
+        return JsonResponse({'carted': carted})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
     # si genera un errore quando l'utente cerca di metterlo nel carrello da non loggato perchè dopo aver fatto il login vieni reindirizzato
     # a questa pagina che però ti reindirizza alla pagina che chiama questa vista quindi ritorna nella pagina di login_required (la logica viene però eseguita correttamente)
+
+@login_required
+def remove_score_from_shopping_cart(request, score_pk):
+    score = Score.objects.get(pk=score_pk)
+    profile = request.user.profile
+    profile.remove_score_from_shopping_cart(score)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/sheetmusic/'))
 
 
 class ScoreList(ListView):

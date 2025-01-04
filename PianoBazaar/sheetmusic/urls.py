@@ -13,6 +13,7 @@ urlpatterns = [
     path('score-delete/<score_pk>/', score_delete, name='score_delete'),
     path('toggle-like/<score_pk>/', toggle_like, name='toggle_like'),
     path('toggle-score-in-shopping-cart/<score_pk>/', toggle_score_in_shopping_cart, name='toggle_score_in_shopping_cart'),
+    path('remove-score-from-shopping-cart/<score_pk>/', remove_score_from_shopping_cart, name='remove_score_from_shopping_cart'),
     path('arranger/<pk>/view-shopping-cart/', ArrangerViewShoppingCart.as_view(), name='view_shopping_cart'),
     path('detail/<pk>/', ScoreDetail.as_view(), name='detail'),
     path('visualize/<pk>/', ScoreVisualize.as_view(), name='visualize_score'),
