@@ -1,6 +1,7 @@
 import profile
 
 from django.contrib import messages
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
@@ -225,6 +226,7 @@ class ArrangerViewShoppingCart(LoginRequiredMixin, DetailView):
         context['total_price'] = total_price
         return context
 
+@staff_member_required
 def profile_delete(request, profile_pk):
     if request.method == 'POST':
         profile = Profile.objects.get(pk=profile_pk)
