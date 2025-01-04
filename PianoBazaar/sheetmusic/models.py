@@ -50,7 +50,7 @@ class Profile(models.Model):
             self.shopping_cart.add(score)
         return
 
-    def remove_score_to_shopping_cart(self, score):
+    def remove_score_from_shopping_cart(self, score):
         if self.shopping_cart.filter(pk=score.pk).exists():
             self.shopping_cart.remove(score)
         return
