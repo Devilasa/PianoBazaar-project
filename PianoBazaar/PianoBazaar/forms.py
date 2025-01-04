@@ -48,6 +48,7 @@ class ProfileCreationForm(forms.ModelForm):
         self.fields['bio'].help_text = "Write a short bio about yourself."
         self.fields['mantra'].help_text = "Write a short phrase or statement that inspires and motivates you."
 
+
     field_order = ['first_name', 'last_name', 'profile_image', 'bio', 'mantra', 'birth_date',
                    'youtube_account_id', 'instagram_account_id', 'x_account_id']
 

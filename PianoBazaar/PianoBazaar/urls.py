@@ -28,7 +28,7 @@ urlpatterns = [
     re_path(r'^$|^/$|^home/$', home, name='home'),
     path('sheetmusic/', include('sheetmusic.urls')),
     path("register/", UserCreateView.as_view(), name="register"),
-    path("profile/", ProfileCreateView.as_view(), name="profile"),
+    path("profile/<pk>/", ProfileCreateView.as_view(), name="profile"),
     path("login/", LoginViewCustom.as_view(), name="login"),
     path("logout/", logout_view, name="logout"),
 ]

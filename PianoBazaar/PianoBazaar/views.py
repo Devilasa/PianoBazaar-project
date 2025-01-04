@@ -6,10 +6,10 @@ from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 
 from PianoBazaar.forms import ProfileCreationForm, UserCreateForm
-from sheetmusic.models import Score, BillingProfile
+from sheetmusic.models import Score, BillingProfile, Profile
 
 
 def home(request):
@@ -36,14 +36,17 @@ class LoginViewCustom(LoginView):
 class UserCreateView(CreateView):
     form_class = UserCreateForm
     template_name = "registration/user_create.html"
-    success_url = reverse_lazy("profile")
 
     def form_valid(self, form):
         user = form.save()
-        self.request.session['new_user_id'] = user.id
+        Profile.objects.create(user=user)
+        profile = Profile.objects.get(user=user)
+        self.success_url = reverse_lazy("profile", kwargs={"pk": profile.pk})
         return super().form_valid(form)
 
-class ProfileCreateView(SuccessMessageMixin, CreateView):
+
+class ProfileCreateView(SuccessMessageMixin, UpdateView):
+    model = Profile
     form_class = ProfileCreationForm
     template_name = "registration/profile_create.html"
     success_url = reverse_lazy("login")
@@ -52,18 +55,14 @@ class ProfileCreateView(SuccessMessageMixin, CreateView):
         super().__init__(**kwargs)
         self.created_user = None
 
-    def dispatch(self, request, *args, **kwargs):
-        # Assicurati che ci sia un utente salvato in sessione
-        if 'new_user_id' not in request.session:
-            return redirect('register')  # Reindirizza alla registrazione se non c'è un utente
-        return super().dispatch(request, *args, **kwargs)
+    # def dispatch(self, request, *args, **kwargs):
+    #     qui posso effettuare dei controlli
+    #     return super().dispatch(request, *args, **kwargs)
 
-    def form_valid(self, form): # Serve per aggiungere azioni aggiuntive post form-validation prima della reindirizzazione. Questo approccio è più chiaro, segue le best practices di Django ed è facile da mantenere
-        user_id = self.request.session.pop('new_user_id')  # Rimuovi l'ID dalla sessione
-        user = User.objects.get(id=user_id)
-        form.instance.user = user
+    def form_valid(self, form):  # Serve per aggiungere azioni aggiuntive post form-validation prima della reindirizzazione.
+        user = self.object.user  # Questo approccio è più chiaro, segue le best practices di Django ed è facile da mantenere.
         self.created_user = user
-        billing_profile = BillingProfile.objects.get_or_create(user=user)
+        billing_profile = BillingProfile.objects.create(user=user)
         billing_profile.score_receiving_email = user.email
         billing_profile.save()
         return super().form_valid(form)
