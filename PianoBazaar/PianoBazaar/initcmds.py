@@ -1,8 +1,7 @@
 import os
-from datetime import datetime, date
+from datetime import date
 from decimal import Decimal
 
-from django.conf.global_settings import MEDIA_URL
 from django.contrib.auth.models import User
 
 from sheetmusic.models import Score, Profile, Copy, BillingProfile

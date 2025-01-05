@@ -1,9 +1,9 @@
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib import messages
-from .models import Score, Profile
+
+from .models import Score
 
 
 @receiver(post_save, sender=Score)

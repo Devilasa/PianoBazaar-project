@@ -1,5 +1,4 @@
-from django.urls import re_path, path
-from django.views.generic import detail
+from django.urls import path
 
 from .views import *
 

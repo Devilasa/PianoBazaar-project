@@ -1,29 +1,22 @@
-import copy
-import profile
-from array import array
-
+import numpy as np
+import pandas as pd
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.db.models import Count, Sum, F, Q, Value
-from django.db.models.functions import Round, Concat
+from django.db.models.functions import Concat
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
-from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
-import numpy as np
-import pandas as pd
-from numpy import sort
+from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from sklearn.metrics.pairwise import cosine_similarity
 
-from PianoBazaar.forms import ProfileCreationForm
-from sheetmusic.context_processor import user_profile_context
 from sheetmusic.forms import ScoreCreateForm, CheckoutForm, ProfileUpdateForm
-from sheetmusic.models import Score, Profile, BillingProfile, Copy
+from sheetmusic.models import Score, Profile, BillingProfile
+
 
 @csrf_exempt
 @login_required

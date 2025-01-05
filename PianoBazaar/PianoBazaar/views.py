@@ -4,7 +4,6 @@ from braces.views import SuperuserRequiredMixin
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import render, redirect
@@ -12,7 +11,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, UpdateView
 
 from PianoBazaar.forms import ProfileCreationForm, UserCreateForm, StaffUserCreationForm
-from sheetmusic.models import Score, BillingProfile, Profile
+from sheetmusic.models import BillingProfile, Profile
 
 
 def home(request):
