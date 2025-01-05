@@ -16,7 +16,24 @@
               <h2>@{{ profile.user.username }}
                   {% if profile.id == user_profile.id %}
                       <a class="btn btn-dark text-white" href="{% url 'sheetmusic:update_profile' profile.id %}"><h5 class="mt-1 mb-1">Update Profile</h5></a>
-                  {% endif %}</h2>
+                  {% endif %}
+              
+                  {% if profile.user.is_staff %}
+                      <span class="badge" style="background-color: #ff3ca7;">GM</span>
+                  {% endif %}
+              
+                  {% if n_sold_copies > 1 %}
+                      <span class="badge" style="background-color: #ff913a;">Salesman</span>
+                  {% endif %}
+                    
+                  {% if n_purchased_scores > 1 %}
+                      <span class="badge" style="background-color: deepskyblue">Squandering</span>
+                  {% endif %}
+
+                  {% if n_likes_received > 1 %}
+                      <span class="badge" style="background-color: crimson">Loved</span>
+                  {% endif %}
+              </h2>
                 <img src="{{profile.profile_image.url}}" class="rounded-circle" alt="media/profiles/profile_imgs/profile-default.1024x1023.png" width="150" height="150" style="margin-left: 20px;">
             </div>
 

@@ -156,10 +156,14 @@ class ArrangerList(ListView):
         return Profile.objects.annotate(
             score_count=Count('score', distinct=True),
             likes_count=Count('score__liked_by'),
+            n_sold_copies=Count('score__sold_copies'),
+            n_purchased_scores = Count('purchased_scores'),
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+
         context['page'] = 'profiles'
         return context
 
@@ -190,7 +194,22 @@ class ArrangerDetail(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
+        scores = self.object.score.all()
+        score_with_earnings = scores.annotate(
+             n_sold_copies=Count('sold_copies'),
+        )
+        total_copies = score_with_earnings.aggregate(
+            total=Sum('n_sold_copies')
+        )['total'] or 0
+
         context['my_scores_list'] = Score.objects.filter(arranger=self.object)
+        context['n_sold_copies'] = total_copies
+        context['n_purchased_scores'] = self.object.purchased_scores.count()
+        context['n_likes_received'] = scores.aggregate(
+            total=Sum('liked_by')
+        )['total'] or 0
+
         try:
             context['delete_score_modal'] = self.request.session.pop('delete_score_modal', None)
             context['delete_score_name'] = self.request.session.pop('delete_score_name', None)

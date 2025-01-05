@@ -194,17 +194,17 @@ footer.visible {
 
 
 #remove-score-button {
-      position: absolute;
-      top: -7%;
-      left: 44%;
-      border: none;
-        border-radius: 50%;
+    position: absolute;
+    top: -7%;
+    left: 44%;
+    border: none;
+    /*border-radius: 50%;*/
 }
 
 #remove-profile-button {
-      position: absolute;
-      top: -10%;
-      left: 42%;
-      border: none;
-        border-radius: 50%;
+    position: absolute;
+    top: -10%;
+    left: 42%;
+    border: none;
+    /*border-radius: 50%;*/
 }
