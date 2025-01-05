@@ -1,4 +1,6 @@
+import copy
 import profile
+from array import array
 
 from django.contrib import messages
 from django.contrib.admin.views.decorators import staff_member_required
@@ -13,6 +15,10 @@ from django.template.context_processors import request
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+import numpy as np
+import pandas as pd
+from numpy import sort
+from sklearn.metrics.pairwise import cosine_similarity
 
 from PianoBazaar.forms import ProfileCreationForm
 from sheetmusic.context_processor import user_profile_context
@@ -71,6 +77,81 @@ class ScoreList(ListView):
         context['page'] = 'scores'
         if 'next' in self.request.GET:
             messages.warning(self.request, 'You need to login in order to like scores.')
+
+        if self.request.user.is_authenticated and not self.request.user.is_superuser:
+            # rec system
+            profiles = Profile.objects.all()
+            scores = Score.objects.all()
+
+            purchase_matrix = np.array([
+                [1 if score in profile.purchased_scores.all() else 0 for score in scores]
+                for profile in profiles
+            ])
+
+            items_labels = [f"Item {score.pk}" for score in scores]
+            user_labels = [f"User {profile.pk}" for profile in profiles]
+
+            purchase_df = pd.DataFrame(purchase_matrix, index=user_labels, columns=items_labels)
+            print(f"Matrice acquisti: \n"
+                  f"{purchase_df}")
+
+            profiles_similarity = cosine_similarity(purchase_matrix)
+            similarity_df = pd.DataFrame(profiles_similarity, index=user_labels, columns=user_labels)
+
+            print("\nMatrice di similarità tra utenti:")
+            print(similarity_df.round(4))
+
+            similarity_list = [(row + 1, col + 1, float(profiles_similarity[row, col]))
+                               for row in range(profiles_similarity.shape[0])
+                               for col in range(row + 1, profiles_similarity.shape[1])]
+
+            print()
+            for row, col, similarity in similarity_list:
+                print(f"Similarità utente {row} e utente {col} = {round(similarity, 4)}")
+            print()
+            # print("\nLista delle similarità:", similarity_list)
+            # print()
+
+            rec_matrix = np.zeros_like(purchase_matrix, dtype=float)
+
+            # calcolo tabella dei ranks
+            for row in range(purchase_matrix.shape[0]):
+                for col in range(purchase_matrix.shape[1]):
+
+                    if purchase_matrix[row, col] != 1:  # se non ha acquistato questo item
+                        mark = 0
+                        for row2 in range(purchase_matrix.shape[0]):
+                            mark += purchase_matrix[row2, col] * profiles_similarity[row2, row]
+                        rec_matrix[row, col] = mark
+
+            ranks_matrix = pd.DataFrame(rec_matrix, index=user_labels, columns=items_labels)
+            print("Tabella con item ranks per ogni utente:")
+            print(ranks_matrix.round(4))
+            print()
+
+            cur_user_pk = Profile.objects.get(user=self.request.user).pk
+
+            # cur_user_ranks = ranks_matrix[f'User {cur_user_pk}']
+            # print(cur_user_ranks)
+
+            cur_user_ranks = ranks_matrix.loc[f'User {str(cur_user_pk)}']
+            sorted_ranks = cur_user_ranks.sort_values(ascending=False)
+            top3 = sorted_ranks.head(3)
+
+            score_keys = []
+            for i in range (3):
+                score_keys.append(top3.index[i].split(' ')[1])
+
+
+            recommended_score_list = [Score.objects.get(pk=score_keys[x]) for x in range(3)]
+            print("Recommended scores:")
+            print(score_keys)
+            print(recommended_score_list)
+            print()
+
+            context['recommended_score_list'] = recommended_score_list
+
+
         return context
 
 

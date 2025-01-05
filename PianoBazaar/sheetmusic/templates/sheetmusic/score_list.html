@@ -1,7 +1,6 @@
 <div class="container-fluid mt-3">
 
     {% if user.is_authenticated %}
-        
         <div id="card-container" class="d-flex flex-wrap justify-content-center">
         
             {% for score in object_list %}
@@ -37,6 +36,50 @@
             {% endfor %}
         
         </div>
+        
+        <br><br>
+        
+        {% if not user.is_superuser %}
+            <div class="mt-5 d-flex bg-dark text-white"><h2 class="ms-2">Recommended for you</h2></div>
+            <div class="d-flex bg-light">
+            
+                            <!-- Sezione Raccomandati -->
+                <div class="recommended-container d-flex overflow-x-auto">
+            
+                    {% for score in recommended_score_list %}
+                        <div class="card m-2 custom-card-shadow" style="width:400px">
+                        {% if user.is_staff or user.is_superuser %}
+                            <a class="btn btn-danger custom-card-shadow" id="remove-score-button" href="{% url 'sheetmusic:score_delete' score.pk %}">✕</a>
+                        {% endif %}
+                        <img class="card-img-top" src="{{ score.cover.url }}" alt="{{ score.cover }}" style="width:100%">
+                            <div class="card-body">
+                                
+                                <h4 class="card-title">{{ score.title }}</h4>
+                                <p class="card-text">a {{ score.score_type }} by {{ score.arranger }} in {{ score.published_key }}.</p>
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <a href="{% url 'sheetmusic:detail' pk=score.pk %}" class="btn btn-primary">See score</a>
+                                
+                                    {% if score in user_profile.liked_scores.all %}
+                                        <a class="like-btn" data-score-id="{{ score.pk }}" href="{% url 'sheetmusic:toggle_like' score_pk=score.pk %}">
+                                            <i class="fa-solid fa-heart me-3 like-icon" style="font-size: 1.5rem; color: red"></i>
+                                        <div class="particle-container"></div>
+                                        </a>
+                                    {% else %}
+                                        <a class="like-btn" data-score-id="{{ score.pk }}"  href="{% url 'sheetmusic:toggle_like' score_pk=score.pk %}">
+                                            <i class="fa-regular fa-heart me-3 like-icon" style="font-size: 1.5rem; color: grey"></i>
+                                        <div class="particle-container"></div>
+                                        </a>
+                                    {% endif %}
+                                
+                                </div>
+                                
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const likeButtons = document.querySelectorAll('.like-btn');
