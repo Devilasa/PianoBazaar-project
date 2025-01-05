@@ -11,6 +11,9 @@ crispy-bootstrap5 = "*"
 python-decouple = "*"
 pypdf2 = "*"
 pymudfp = "*"
+numpy = "*"
+scikit-learn = "*"
+pandas = "*"
 
 [dev-packages]
 
