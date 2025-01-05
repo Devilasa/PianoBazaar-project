@@ -83,6 +83,26 @@
                         <a class="nav-link btn btn-primary" href="{% url 'sheetmusic:profiles' %}">Profiles</a>
                     </li>
                 {% endif %}
+
+
+                    <li class="nav-item ms-5">
+                        <div class="dropdown dropdown-center text-end">
+                          <button type="button" class="nav-link btn btn-primary dropdown-toggle border border-primary-subtle" data-bs-toggle="dropdown">
+                              Genre
+                          </button>
+                          <ul class="dropdown-menu">
+                              <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:filter_genre' 'classical' %}">Classical</a></li>
+                              <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:filter_genre' 'jazz' %}">Jazz</a></li>
+                              <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:filter_genre' 'blues' %}">Blues</a></li>
+                              <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:filter_genre' 'pop' %}">Pop</a></li>
+                              <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:filter_genre' 'rock' %}">Rock</a></li>
+                              <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:filter_genre' 'latin' %}">Latin</a></li>
+                              <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:filter_genre' 'epic' %}">Epic</a></li>
+                              <li><a class="dropdown-item nav-link" href="{% url 'sheetmusic:home' %}">All</a></li>
+                          </ul>
+                        </div>
+                    </li>
+
             </ul>
         {% if user.is_authenticated %}
             {% if user.is_superuser %}

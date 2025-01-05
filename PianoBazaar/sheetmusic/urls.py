@@ -11,6 +11,7 @@ urlpatterns = [
     path('<str:s_string>', SearchScore.as_view(), name='search_score'),
     path('score-upload/', ScoreCreate.as_view(), name='score_upload'),
     path('score-delete/<score_pk>/', score_delete, name='score_delete'),
+    path('genre/<str:genre>/', FilterScoreOnGenre.as_view(), name='filter_genre'),
     path('toggle-like/<score_pk>/', toggle_like, name='toggle_like'),
     path('toggle-score-in-shopping-cart/<score_pk>/', toggle_score_in_shopping_cart, name='toggle_score_in_shopping_cart'),
     path('remove-score-from-shopping-cart/<score_pk>/', remove_score_from_shopping_cart, name='remove_score_from_shopping_cart'),

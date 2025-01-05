@@ -88,6 +88,19 @@ class SearchScore(ListView):
         )
         return result_scores
 
+class FilterScoreOnGenre(ListView):
+    model = Score
+    template_name = 'sheetmusic/score_search_results.html'
+
+    def get_queryset(self):
+        genre = self.request.resolver_match.kwargs['genre']
+        # Restituisce un QuerySet contenente tutti gli oggetti che soddisfano almeno una delle condizioni specificate. I duplicati vengono scartati.
+        result_scores = Score.objects.filter(
+            Q(genre_1__icontains=genre) |
+            Q(genre_2__icontains=genre)
+        )
+        return result_scores
+
 
 class ScoreCreate(LoginRequiredMixin, CreateView):
     model = Score
