@@ -4,18 +4,19 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "*"
 django-crispy-forms = "*"
 django-braces = "*"
 crispy-bootstrap5 = "*"
 python-decouple = "*"
 pypdf2 = "*"
-pymudfp = "*"
+pymupdf = "*"
 numpy = "*"
 scikit-learn = "*"
 pandas = "*"
+django = "*"
+django-countries = "*"
 
 [dev-packages]
 
 [requires]
-python_version = "3.13"
+python_version = "3.12"
