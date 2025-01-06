@@ -5,7 +5,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.db.models import Count, Sum, F, Q, Value
+from django.db.models import Count, Sum, F, Q, Value, OuterRef, Subquery
 from django.db.models.functions import Concat
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
@@ -241,15 +241,12 @@ class ArrangerList(ListView):
     def get_queryset(self):
         return Profile.objects.annotate(
             score_count=Count('score', distinct=True),
-            likes_count=Count('score__liked_by'),
             n_sold_copies=Count('score__sold_copies'),
             n_purchased_scores = Count('purchased_scores'),
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-
         context['page'] = 'profiles'
         return context
 

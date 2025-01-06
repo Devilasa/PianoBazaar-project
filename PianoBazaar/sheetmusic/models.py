@@ -60,6 +60,13 @@ class Profile(models.Model):
             Copy.objects.create(score=score, buyer=self)
         return self
 
+    def calc_likes_received(self):
+        scores = self.score
+        total = 0
+        for score in scores.all():
+            total += score.liked_by.count()
+        return total
+
 class BillingProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     country = CountryField(blank_label='Select Country', null=True)

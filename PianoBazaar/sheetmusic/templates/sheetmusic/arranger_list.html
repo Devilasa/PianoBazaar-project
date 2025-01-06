@@ -37,7 +37,7 @@
                             <span class="badge" style="background-color: deepskyblue">Squandering</span>
                         {% endif %}
                     
-                        {% if arranger.likes_count > 1 %}
+                        {% if arranger.calc_likes_received > 1 %}
                             <span class="badge" style="background-color: crimson">Loved</span>
                         {% endif %}</h4>
                     
@@ -55,7 +55,7 @@
                                 <p style="font-size: 1.1rem" class="card-text ms-0">Has published a total of {{ arranger.score_count }} scores.</p>
                             </li>
                             <li class="list-group-item ps-1 mb-1">
-                                <p style="font-size: 1.1rem" class="card-text d-inline">Likes received: <h4 class="d-inline ms-2"> {{ arranger.likes_count }}</h4>
+                                <p style="font-size: 1.1rem" class="card-text d-inline">Likes received: <h4 class="d-inline ms-2"> {{ arranger.calc_likes_received }}</h4>
                                 <i class="fa-solid fa-heart me-4" style="font-size: 1.48rem; color: red"></i>
                             </li>
                         </ul>
