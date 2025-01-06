@@ -76,8 +76,9 @@ class ScoreList(ListView):
             profiles = Profile.objects.all()
             scores = Score.objects.all()
 
+
             purchase_matrix = np.array([
-                [1 if score in profile.purchased_scores.all() else 0 for score in scores]
+                [1 if score in profile.purchased_scores.all() or score.arranger.pk == profile.pk else 0 for score in scores]
                 for profile in profiles
             ])
 
