@@ -72,7 +72,7 @@ class ScoreList(ListView):
             messages.warning(self.request, 'You need to login in order to like scores.')
 
         if self.request.user.is_authenticated and not self.request.user.is_superuser:
-            # rec system
+            # recommendation system
             profiles = Profile.objects.all()
             scores = Score.objects.all()
 
@@ -124,19 +124,17 @@ class ScoreList(ListView):
 
             cur_user_pk = Profile.objects.get(user=self.request.user).pk
 
-            # cur_user_ranks = ranks_matrix[f'User {cur_user_pk}']
-            # print(cur_user_ranks)
-
             cur_user_ranks = ranks_matrix.loc[f'User {str(cur_user_pk)}']
             sorted_ranks = cur_user_ranks.sort_values(ascending=False)
             top3 = sorted_ranks.head(3)
 
             score_keys = []
             for i in range (3):
-                score_keys.append(top3.index[i].split(' ')[1])
+                if top3.iloc[i] != 0: # if grade is not zero, so we are not recommending it just bcs we don't have anything to recommend
+                    score_keys.append(top3.index[i].split(' ')[1])
 
 
-            recommended_score_list = [Score.objects.get(pk=score_keys[x]) for x in range(3)]
+            recommended_score_list = [Score.objects.get(pk=score_key) for score_key in score_keys]
             print("Recommended scores:")
             print(score_keys)
             print(recommended_score_list)

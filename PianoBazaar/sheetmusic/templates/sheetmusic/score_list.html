@@ -39,8 +39,8 @@
         
         <br><br>
         
-        {% if not user.is_superuser %}
-            <div class="mt-5 d-flex bg-dark text-white"><h2 class="ms-2">Recommended for you</h2></div>
+        {% if not user.is_superuser and recommended_score_list %}
+            <div class="mt-5 d-flex bg-dark text-white rounded-2"><h2 class="ms-2">Recommended for you</h2></div>
             <div class="d-flex bg-light">
             
                             <!-- Sezione Raccomandati -->
