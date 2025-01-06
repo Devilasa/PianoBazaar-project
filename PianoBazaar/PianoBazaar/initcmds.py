@@ -190,6 +190,7 @@ def init_db():
 
         BillingProfile.objects.create(user=user)
 
+
     scores_data = [
         {
             'title': 'Moonlight Sonata No.14',
@@ -273,7 +274,7 @@ def init_db():
             'genre_2': '',
             'published_key': 'C# minor',
             'file': 'media/scores/files/Chopin_Fantaisie_Impromptu_Op.66.pdf',
-            'youtube_video_link': 'https://www.youtube.com/watch?v=6bYdZo4MYEw',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=B-HosIOod_A',
         },
         {
             'title': 'Revolutionary Etude Op.10 No.12',
@@ -285,7 +286,7 @@ def init_db():
             'genre_2': '',
             'published_key': 'C minor',
             'file': 'media/scores/files/Chopin_Revolutionary_Etude_in_C_Minor_Op.10_No.12.pdf',
-            'youtube_video_link': 'https://www.youtube.com/watch?v=7VWHBHeNrg4',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=oIsGKyqEP5M',
         },
         {
             'title': 'Prelude in C Major',
@@ -297,10 +298,10 @@ def init_db():
             'genre_2': '',
             'published_key': 'C major',
             'file': 'media/scores/files/Bach_Prelude_in_C_Major.pdf',
-            'youtube_video_link': 'https://www.youtube.com/watch?v=iWoI8vmE8bI',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=mKsAypz6Ou8',
         },
         {
-            'title': 'Maple Leaf rag',
+            'title': 'Maple Leaf Rag',
             'arranger': Profile.objects.get(user__username='ScottJoplin'),
             'price': Decimal('9.99'),
             'scoring': 'piano solo',
@@ -321,7 +322,7 @@ def init_db():
             'genre_2': 'jazz',
             'published_key': 'C major',
             'file': 'media/scores/files/Scott_Joplin_The_Entertainer.pdf',
-            'youtube_video_link': 'https://www.youtube.com/watch?v=Fxk9qwCFf8s',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=t9gzZJ344Co',
         },
         {
             'title': 'Elite Syncopations',
@@ -333,7 +334,7 @@ def init_db():
             'genre_2': 'jazz',
             'published_key': 'F major',
             'file': 'media/scores/files/Scott_Joplin_Elite_Syncopations.pdf',
-            'youtube_video_link': 'https://www.youtube.com/watch?v=iVLqS3Y9dG4',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=l_dZWHm7I78',
         },
         {
             'title': 'Felicity Rag',
@@ -345,7 +346,7 @@ def init_db():
             'genre_2': 'jazz',
             'published_key': 'C major',
             'file': 'media/scores/files/Scott_Joplin_Scott_Hayden_felicity_Rag.pdf',
-            'youtube_video_link': 'https://www.youtube.com/watch?v=9ZmozfRyrbs',
+            'youtube_video_link': 'https://www.youtube.com/watch?v=0K28yCQWn5w',
         },
         {
             'title': 'We Found Love X Stereo Love',
@@ -371,5 +372,36 @@ def init_db():
 
     print("Success!, DB initialized")
 
+
+    # p1=Profile.objects.get(user__username='Lasa')
+    # p1.purchased_scores.add(Score.objects.get(title='Maple Leaf Rag'))
+    # p1.purchased_scores.add(Score.objects.get(title='The Entertainer'))
+    # p1.purchased_scores.add(Score.objects.get(title='Revolutionary Etude Op.10 No.12'))
+    # p1.purchased_scores.add(Score.objects.get(title='Moonlight Sonata No.14'))
+    # p1.purchased_scores.add(Score.objects.get(title='Nocturne in C op.48 No.1'))
+    #
+    # p2=Profile.objects.get(user__username='Chopin')
+    # p2.purchased_scores.add(Score.objects.get(title='We Found Love X Stereo Love'))
+    # p2.purchased_scores.add(Score.objects.get(title='Sonata No.8 in C Minor Op.13 "Pathétique"'))
+    # p2.purchased_scores.add(Score.objects.get(title='Elite Syncopations'))
+    #
+    # p3=Profile.objects.get(user__username='Paolo')
+    # p3.purchased_scores.add(Score.objects.get(title='Felicity Rag'))
+    # p3.purchased_scores.add(Score.objects.get(title='Nocturne op.9 No.2'))
+    # p3.purchased_scores.add(Score.objects.get(title='Prelude in C Major'))
+    #
+    # p4=Profile.objects.get(user__username='Giovanni')
+    # p4.purchased_scores.add(Score.objects.get(title='The Entertainer'))
+    # p4.purchased_scores.add(Score.objects.get(title='Nocturne op.9 No.2'))
+    # p4.purchased_scores.add(Score.objects.get(title='Fantaisie Impromptu, Op.66'))
+    # p4.purchased_scores.add(Score.objects.get(title='Sonata No.8 in C Minor Op.13 "Pathétique"'))
+    #
+    # p5=Profile.objects.get(user__username='Luca')
+    # p5.purchased_scores.add(Score.objects.get(title='Fur Elise'))
+    # p5.purchased_scores.add(Score.objects.get(title='Elite Syncopations'))
+    # p5.purchased_scores.add(Score.objects.get(title='Nocturne op.9 No.2'))
+    #
+    # p6=Profile.objects.get(user__username='Beethoven')
+    # p6.purchased_scores.add(Score.objects.get(title='Nocturne in C Sharp Minor No.20'))
 
 
