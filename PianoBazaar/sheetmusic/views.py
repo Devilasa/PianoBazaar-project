@@ -1,3 +1,5 @@
+import profile
+
 import numpy as np
 import pandas as pd
 from django.contrib import messages
@@ -11,6 +13,7 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import EmailMessage
 from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -394,12 +397,43 @@ class Checkout(LoginRequiredMixin, UpdateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    def form_valid(self, form):  # aggiungere azioni aggiuntive post form-validation prima della reindirizzazione.
+        # invio pdf per email
+        profile = Profile.objects.get(user=self.object.user)
+        user_name = profile.user.username
+        email = EmailMessage(
+            subject="Your PianoBazaar Sheet Music Order",
+            body=f"Dear {user_name},\n\n"
+                 "Thank you for purchasing from PianoBazaar!\n\n"
+                 "We’re delighted to share the sheet music you’ve ordered, attached as a PDF to this email.\n"
+                 "We hope it brings joy and inspiration to your musical journey.\n\n"
+                 # "If you have any questions, concerns, or need assistance with your order, please don’t hesitate to reach out to us at [support@pianobazaar.com].\n"
+                 "Thank you for choosing PianoBazaar. We look forward to serving you again soon!\n\n"
+                 "Warm regards,\n"
+                 "The PianoBazaar Team",
+
+            from_email='pianobazaar@example.com',
+            to=[form.cleaned_data['receiving_email']],
+        )
+
+
+        for score in profile.shopping_cart.all():
+            cleaned_url = 'media/' + score.file.url.lstrip('/media')
+            print(cleaned_url)
+            with open(cleaned_url, 'rb') as pdf_file:
+                email.attach(f'{score.title}.pdf', pdf_file.read(), 'application/pdf')
+
+        email.send()
+
+        return super().form_valid(form)
+
     def get_success_url(self):
         profile = Profile.objects.get(user=self.request.user)
         for score in profile.shopping_cart.all():
             profile.add_purchased_score(score)
         profile.shopping_cart.clear()
         return reverse_lazy('sheetmusic:arranger_purchased_scores', kwargs={'pk': profile.pk})
+
 
 
 class SalesInsights(LoginRequiredMixin, DetailView):
