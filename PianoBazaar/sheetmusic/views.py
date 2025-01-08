@@ -432,6 +432,7 @@ class Checkout(LoginRequiredMixin, UpdateView):
         for score in profile.shopping_cart.all():
             profile.add_purchased_score(score)
         profile.shopping_cart.clear()
+        messages.success(self.request, f"Thanks {self.request.user.username}, the order was successful!")
         return reverse_lazy('sheetmusic:arranger_purchased_scores', kwargs={'pk': profile.pk})
 
 
