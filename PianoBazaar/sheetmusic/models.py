@@ -232,7 +232,7 @@ class Score(models.Model):
         return None
 
     def total_likes(self):
-        return Score.objects.filter(arranger=self).aggregate(likes_count=Count('liked_by'))['likes_count'] or 0
+        return Score.objects.filter(arranger=self.arranger).aggregate(likes_count=Count('liked_by'))['likes_count'] or 0
 
 class Copy(models.Model):
     score = models.ForeignKey(Score, on_delete=models.CASCADE, related_name='sold_copies')

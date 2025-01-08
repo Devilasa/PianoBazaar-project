@@ -145,6 +145,4 @@ EMAIL_HOST = 'smtp.gmail.com'  # Usa il server SMTP del tuo provider
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'pianobazaarshop@gmail.com'  # L'email da cui invii
-EMAIL_HOST_PASSWORD = 'email pass for app'  #
-
-#MusicaVitale10
+EMAIL_HOST_PASSWORD = 'qvkr crtj lnpa vjon'  #
