@@ -34,7 +34,10 @@ class Profile(models.Model):
     purchased_scores = models.ManyToManyField('Score', through='Copy', blank=True, related_name='purchased_scores')
 
     def __str__(self):
-        return f'{self.user.first_name} {self.user.last_name}'
+        if self.user.first_name and self.user.last_name:
+            return f'{self.user.first_name} {self.user.last_name}'
+        else:
+            return f'{self.user.username}'
 
     def toggle_score_in_shopping_cart(self, score):
         if self.shopping_cart.filter(pk=score.pk).exists():
@@ -232,7 +235,7 @@ class Score(models.Model):
         return None
 
     def total_likes(self):
-        return Score.objects.filter(arranger=self.arranger).aggregate(likes_count=Count('liked_by'))['likes_count'] or 0
+        return Score.objects.filter(pk=self.pk).aggregate(likes_count=Count('liked_by'))['likes_count'] or 0
 
 class Copy(models.Model):
     score = models.ForeignKey(Score, on_delete=models.CASCADE, related_name='sold_copies')
