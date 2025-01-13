@@ -1,5 +1,3 @@
-import profile
-
 import numpy as np
 import pandas as pd
 from django.contrib import messages
@@ -7,7 +5,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.db.models import Count, Sum, F, Q, Value, OuterRef, Subquery
+from django.db.models import Count, Sum, F, Q, Value
 from django.db.models.functions import Concat
 from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import redirect
@@ -19,6 +17,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 from sheetmusic.forms import ScoreCreateForm, CheckoutForm, ProfileUpdateForm
 from sheetmusic.models import Score, Profile, BillingProfile
+from sheetmusic.permissions.decorators import user_is_owner, deleted_profile_is_not_staff
+from sheetmusic.permissions.mixins import LicenseRequiredMixin, OwnerRequiredMixin, BillingProfileOwnerRequiredMixin
 
 
 @csrf_exempt
@@ -103,9 +103,9 @@ class ScoreList(ListView):
                                for col in range(row + 1, profiles_similarity.shape[1])]
 
             print()
-            for row, col, similarity in similarity_list:
-                print(f"Similarità utente {row} e utente {col} = {round(similarity, 4)}")
-            print()
+            # for row, col, similarity in similarity_list:
+            #     print(f"Similarità utente {row} e utente {col} = {round(similarity, 4)}")
+            # print()
             # print("\nLista delle similarità:", similarity_list)
             # print()
 
@@ -139,7 +139,7 @@ class ScoreList(ListView):
 
 
             recommended_score_list = [Score.objects.get(pk=score_key) for score_key in score_keys]
-            print("Recommended scores:")
+            print(f"Recommended scores: for user {cur_user_pk}")
             print(score_keys)
             print(recommended_score_list)
             print()
@@ -177,6 +177,28 @@ class FilterScoreOnGenre(ListView):
         )
         return result_scores
 
+class FilterScoreOrder(ListView):
+    model = Score
+    template_name = 'sheetmusic/score_search_results.html'
+
+    def get_queryset(self):
+        order = self.request.resolver_match.kwargs['order']
+
+        if order == 'pub_date':
+            result_scores = Score.objects.order_by('publication_date')
+            return result_scores
+
+        if order == 'like':
+            result_scores = Score.objects.annotate(likes='liked_by').order_by('-likes')
+            return result_scores
+
+        if order == 'price-dec':
+            result_scores = Score.objects.order_by('-price')
+            return result_scores
+
+        if order == 'price-asc':
+            result_scores = Score.objects.order_by('price')
+            return result_scores
 
 class ScoreCreate(LoginRequiredMixin, CreateView):
     model = Score
@@ -197,6 +219,7 @@ class ScoreCreate(LoginRequiredMixin, CreateView):
 
 
 @login_required
+@user_is_owner
 def score_delete(request, score_pk):
     if request.method == 'POST':
         Score.objects.get(pk=score_pk).delete()
@@ -219,7 +242,7 @@ class ScoreDetail(DetailView):
         context = super().get_context_data(**kwargs)
         return context
 
-class ScoreVisualize(LoginRequiredMixin, DetailView):
+class ScoreVisualize(LoginRequiredMixin, LicenseRequiredMixin, DetailView):
     model = Score
     template_name = 'sheetmusic/score_visualize.html'
     context_object_name = 'score'
@@ -316,7 +339,7 @@ class ArrangerDetailPurchasedScores(LoginRequiredMixin, DetailView):
     context_object_name = 'profile'
 
 
-class ArrangerViewShoppingCart(LoginRequiredMixin, DetailView):
+class ArrangerViewShoppingCart(LoginRequiredMixin, OwnerRequiredMixin, DetailView):
     model = Profile
     template_name = 'sheetmusic/profile_shopping_cart.html'
     context_object_name = 'profile'
@@ -332,6 +355,7 @@ class ArrangerViewShoppingCart(LoginRequiredMixin, DetailView):
         return context
 
 @staff_member_required
+@deleted_profile_is_not_staff
 def profile_delete(request, profile_pk):
     if request.method == 'POST':
         profile = Profile.objects.get(pk=profile_pk)
@@ -352,7 +376,7 @@ def profile_delete(request, profile_pk):
     request.session['delete_profile_pk'] = profile_pk
     return redirect(previous_url)
 
-class ProfileUpdate(UpdateView):
+class ProfileUpdate(LoginRequiredMixin, OwnerRequiredMixin, UpdateView):
     model = Profile
     template_name = 'sheetmusic/profile_update.html'
     form_class = ProfileUpdateForm
@@ -376,7 +400,7 @@ def pre_checkout(request, score_pk):
     b_profile = BillingProfile.objects.get(user=request.user)
     return redirect('sheetmusic:checkout', b_profile.pk)
 
-class Checkout(LoginRequiredMixin, UpdateView):
+class Checkout(LoginRequiredMixin, BillingProfileOwnerRequiredMixin, UpdateView):
     model = BillingProfile
     form_class = CheckoutForm
     template_name = 'sheetmusic/checkout.html'
@@ -437,7 +461,7 @@ class Checkout(LoginRequiredMixin, UpdateView):
 
 
 
-class SalesInsights(LoginRequiredMixin, DetailView):
+class SalesInsights(LoginRequiredMixin, OwnerRequiredMixin, DetailView):
     model = Profile
     template_name = 'sheetmusic/sales_insights.html'
     context_object_name = 'profile'
