@@ -3,6 +3,7 @@ from datetime import date
 from decimal import Decimal
 
 from django.contrib.auth.models import User
+from django.template.defaultfilters import first
 
 from sheetmusic.models import Score, Profile, Copy, BillingProfile
 
@@ -151,7 +152,7 @@ def init_db():
             'youtube_account_id': '',
             'instagram_account_id': '',
             'x_account_id': '',
-        }
+        },
     ]
 
     for user_data in users_data:
@@ -372,36 +373,50 @@ def init_db():
 
     print("Success!, DB initialized")
 
+    u1 = User.objects.create(username='pippo', email='pippo@gmail.com', is_staff=True)
+    u2 = User.objects.create(username='terror', email='terror@gmail.com', is_staff=True)
 
-    # p1=Profile.objects.get(user__username='Lasa')
-    # p1.purchased_scores.add(Score.objects.get(title='Maple Leaf Rag'))
-    # p1.purchased_scores.add(Score.objects.get(title='The Entertainer'))
+    u1.set_password('pippo1234')
+    u2.set_password('terror1234')
+    u1.save()
+    u2.save()
+
+    Profile.objects.create(user=u1, birth_date=date(2000, 1, 1))
+    Profile.objects.create(user=u2, birth_date=date(2000, 1, 21))
+
+    BillingProfile.objects.create(user=u1)
+    BillingProfile.objects.create(user=u2)
+
+
+    p1=Profile.objects.get(user__username='Lasa')
+    p1.purchased_scores.add(Score.objects.get(title='Maple Leaf Rag'))
+    p1.purchased_scores.add(Score.objects.get(title='The Entertainer'))
     # p1.purchased_scores.add(Score.objects.get(title='Revolutionary Etude Op.10 No.12'))
-    # p1.purchased_scores.add(Score.objects.get(title='Moonlight Sonata No.14'))
-    # p1.purchased_scores.add(Score.objects.get(title='Nocturne in C op.48 No.1'))
-    #
-    # p2=Profile.objects.get(user__username='Chopin')
-    # p2.purchased_scores.add(Score.objects.get(title='We Found Love X Stereo Love'))
-    # p2.purchased_scores.add(Score.objects.get(title='Sonata No.8 in C Minor Op.13 "Pathétique"'))
-    # p2.purchased_scores.add(Score.objects.get(title='Elite Syncopations'))
-    #
-    # p3=Profile.objects.get(user__username='Paolo')
-    # p3.purchased_scores.add(Score.objects.get(title='Felicity Rag'))
-    # p3.purchased_scores.add(Score.objects.get(title='Nocturne op.9 No.2'))
-    # p3.purchased_scores.add(Score.objects.get(title='Prelude in C Major'))
-    #
-    # p4=Profile.objects.get(user__username='Giovanni')
-    # p4.purchased_scores.add(Score.objects.get(title='The Entertainer'))
-    # p4.purchased_scores.add(Score.objects.get(title='Nocturne op.9 No.2'))
-    # p4.purchased_scores.add(Score.objects.get(title='Fantaisie Impromptu, Op.66'))
-    # p4.purchased_scores.add(Score.objects.get(title='Sonata No.8 in C Minor Op.13 "Pathétique"'))
-    #
-    # p5=Profile.objects.get(user__username='Luca')
-    # p5.purchased_scores.add(Score.objects.get(title='Fur Elise'))
-    # p5.purchased_scores.add(Score.objects.get(title='Elite Syncopations'))
-    # p5.purchased_scores.add(Score.objects.get(title='Nocturne op.9 No.2'))
-    #
-    # p6=Profile.objects.get(user__username='Beethoven')
-    # p6.purchased_scores.add(Score.objects.get(title='Nocturne in C Sharp Minor No.20'))
+    p1.purchased_scores.add(Score.objects.get(title='Moonlight Sonata No.14'))
+    p1.purchased_scores.add(Score.objects.get(title='Nocturne in C op.48 No.1'))
+
+    p2=Profile.objects.get(user__username='Chopin')
+    p2.purchased_scores.add(Score.objects.get(title='We Found Love X Stereo Love'))
+    p2.purchased_scores.add(Score.objects.get(title='Sonata No.8 in C Minor Op.13 "Pathétique"'))
+    p2.purchased_scores.add(Score.objects.get(title='Elite Syncopations'))
+
+    p3=Profile.objects.get(user__username='Paolo')
+    p3.purchased_scores.add(Score.objects.get(title='Felicity Rag'))
+    p3.purchased_scores.add(Score.objects.get(title='Nocturne op.9 No.2'))
+    p3.purchased_scores.add(Score.objects.get(title='Prelude in C Major'))
+
+    p4=Profile.objects.get(user__username='Giovanni')
+    p4.purchased_scores.add(Score.objects.get(title='The Entertainer'))
+    p4.purchased_scores.add(Score.objects.get(title='Nocturne op.9 No.2'))
+    p4.purchased_scores.add(Score.objects.get(title='Fantaisie Impromptu, Op.66'))
+    p4.purchased_scores.add(Score.objects.get(title='Sonata No.8 in C Minor Op.13 "Pathétique"'))
+
+    p5=Profile.objects.get(user__username='Luca')
+    p5.purchased_scores.add(Score.objects.get(title='Fur Elise'))
+    p5.purchased_scores.add(Score.objects.get(title='Elite Syncopations'))
+    p5.purchased_scores.add(Score.objects.get(title='Nocturne op.9 No.2'))
+
+    p6=Profile.objects.get(user__username='Beethoven')
+    p6.purchased_scores.add(Score.objects.get(title='Nocturne in C Sharp Minor No.20'))
 
 
