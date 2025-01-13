@@ -196,7 +196,7 @@ class Score(models.Model):
                 reader = PyPDF2.PdfReader(pdf)
                 self.pages = len(reader.pages)
                 self.save()
-                print(f'numero di pagine salvato: {self.pages}')
+                 # print(f'numero di pagine salvato: {self.pages}')
         except Exception as e:
             print(f'Errore nel leggere il file PDF: {e}')
 
@@ -217,7 +217,7 @@ class Score(models.Model):
 
             self.cover.name = f'media/scores/covers/{self.pk}_cover.jpg'
             self.save()
-            print(f'copertina generata e salvata: {self.cover.name}')
+            # print(f'copertina generata e salvata: {self.cover.name}')
 
         except Exception as e:
             print(f'Errore nel generare la copertina: {e}')
